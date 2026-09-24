@@ -69,6 +69,19 @@ def _clamp_image_bytes(png_bytes: bytes, max_edge: int = MAX_IMAGE_EDGE) -> byte
         return buf.getvalue()
 
 
+def _to_int(value) -> int:
+    """Coerce a possibly-stringified numeric tool argument to int.
+
+    Claude's tool calls occasionally serialize a numeric argument as a JSON
+    string (e.g. "4" instead of 4) even when the declared schema type is
+    integer. ADK's plain-function tools unpack the raw JSON args straight
+    into the Python call (unlike Pydantic-model tool params, which DO coerce)
+    so every numeric arg on these simple tools needs this guard, or a stray
+    string blows up an arithmetic comparison deep inside the tool.
+    """
+    return int(float(value)) if isinstance(value, str) else int(value)
+
+
 def _resolve_image(image_path: str) -> Path:
     p = Path(image_path)
     if not p.is_absolute():
@@ -122,6 +135,8 @@ def inspect_region(image_path: str, x: int, y: int, w: int, h: int, scale: int =
     from PIL import Image
     from google.genai import types
 
+    x, y, w, h, scale = _to_int(x), _to_int(y), _to_int(w), _to_int(h), _to_int(scale)
+
     path = _resolve_image(image_path)
     if not path.exists():
         return {"error": f"image not found: {image_path}"}
@@ -163,6 +178,8 @@ def sample_color_at(image_path: str, x: int, y: int) -> dict:
     """
     from PIL import Image
 
+    x, y = _to_int(x), _to_int(y)
+
     path = _resolve_image(image_path)
     if not path.exists():
         return {"error": f"image not found: {image_path}"}
@@ -196,6 +213,9 @@ def find_bbox_of_color(
         tolerance: Max per-channel difference to still count as a match.
     """
     from PIL import Image
+
+    tolerance = _to_int(tolerance)
+    region = [_to_int(v) for v in region] if region else None
 
     path = _resolve_image(image_path)
     if not path.exists():
