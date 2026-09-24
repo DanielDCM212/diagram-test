@@ -111,7 +111,7 @@ def render(diagram: dict) -> str:
         ).set("as", "geometry")
 
     for i, edge in enumerate(diagram["edges"]):
-        eid = edge.get("id", f"e{i}")
+        eid = edge.get("id") or f"e{i}"
         attrs = {
             "id": eid,
             "value": edge.get("label", ""),
