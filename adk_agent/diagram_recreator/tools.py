@@ -1,16 +1,31 @@
 """Tools for the diagram-recreation agent.
 
 These mirror the manual steps used to build diagrams/*.drawio by hand:
-  1. measure exact pixel colors / bounding boxes instead of eyeballing
+  1. zoom into dense/small regions and actually look before transcribing text
+     (inspect_region)
+  2. measure exact pixel colors / bounding boxes instead of eyeballing
      (sample_color_at, find_bbox_of_color, get_image_size)
-  2. save the extracted structure as schema-validated JSON (save_diagram)
-  3. render it with the existing deterministic renderer, no LLM involved
+  3. save the extracted structure as schema-validated JSON (save_diagram)
+  4. render it with the existing deterministic renderer, no LLM involved
      (render_drawio)
-  4. validate the resulting XML has no dangling edge references
+  5. validate the resulting XML has no dangling edge references
      (validate_drawio)
-  5. render a rough layout preview to catch gross mistakes before finishing
-     (sanity_plot)
+  6. render a rough layout preview and actually look at it to catch gross
+     mistakes before finishing (sanity_plot)
+
+inspect_region and sanity_plot return a `google.genai.types.Part` holding
+image bytes alongside their dict payload. ADK's tool-result handling detects
+any `types.Part` value in a returned dict/list and pulls it out as a separate
+multimodal part of the FunctionResponse (see
+flows/llm_flows/_tool_caller.py::_extract_multimodal_parts in the installed
+google-adk package) — and for Claude specifically (models/anthropic_llm.py::
+_function_response_media_blocks) that part is converted into a real
+ImageBlockParam inside the tool_result content, which Claude actually sees on
+the next turn. This is what makes a real zoom-and-reread loop possible here,
+not just a numeric measurement — confirmed against the installed ADK source,
+not assumed.
 """
+import io
 import json
 import sys
 import xml.etree.ElementTree as ET
@@ -19,7 +34,7 @@ from typing import Optional
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 IMAGES_DIR = PROJECT_ROOT / "images"
-DIAGRAMS_DIR = PROJECT_ROOT / "diagramsTest"
+DIAGRAMS_DIR = PROJECT_ROOT / "diagramsTestSonnetV2"
 DIAGRAMS_DIR.mkdir(exist_ok=True)
 
 if str(PROJECT_ROOT) not in sys.path:
@@ -28,6 +43,30 @@ if str(PROJECT_ROOT) not in sys.path:
 from scripts.json_to_drawio import render as render_mxgraph_xml  # noqa: E402
 
 from .schema import Diagram  # noqa: E402
+
+
+# Anthropic rejects a request with multiple images if any of them exceeds
+# 2000px on a side ("max allowed size for many-image requests"); 1568px is
+# their documented long-edge recommendation for a single image. Every image
+# handed back to the model from a tool is clamped to this before returning,
+# regardless of what scale/region the model asked for -- relying on the
+# model to self-limit is exactly what caused the 400 this replaces.
+MAX_IMAGE_EDGE = 1568
+
+
+def _clamp_image_bytes(png_bytes: bytes, max_edge: int = MAX_IMAGE_EDGE) -> bytes:
+    """Downscale PNG bytes so neither dimension exceeds max_edge, preserving aspect ratio."""
+    from PIL import Image
+
+    with Image.open(io.BytesIO(png_bytes)) as im:
+        if im.width <= max_edge and im.height <= max_edge:
+            return png_bytes
+        ratio = min(max_edge / im.width, max_edge / im.height)
+        new_size = (max(1, round(im.width * ratio)), max(1, round(im.height * ratio)))
+        im = im.convert("RGB").resize(new_size, Image.LANCZOS)
+        buf = io.BytesIO()
+        im.save(buf, format="PNG")
+        return buf.getvalue()
 
 
 def _resolve_image(image_path: str) -> Path:
@@ -55,6 +94,60 @@ def get_image_size(image_path: str) -> dict:
         return {"error": f"image not found: {image_path}"}
     with Image.open(path) as im:
         return {"width": im.width, "height": im.height}
+
+
+def inspect_region(image_path: str, x: int, y: int, w: int, h: int, scale: int = 4) -> dict:
+    """Crop a region of the source image and zoom in, so you can actually read small/dense detail.
+
+    Use this whenever a region has small text, a table, a legend with many
+    numbers, a Venn diagram, or several small boxes packed close together —
+    anywhere you're not fully confident reading it from the full image. The
+    cropped, upscaled image is returned to you directly (not just saved to
+    disk) — look at it before transcribing labels/numbers from that area.
+    Prefer several small, targeted crops (roughly 150-300px per side before
+    scaling) over one huge crop — it reads more clearly, costs less, and
+    won't get silently downscaled (the result's `scale` tells you the scale
+    actually used, which is reduced automatically if w*scale or h*scale
+    would exceed a safe size for the API — request a smaller region rather
+    than a smaller scale if a crop comes back less sharp than expected).
+
+    Args:
+        image_path: Path to the image, relative to the project root or just the filename in images/.
+        x: Left edge of the region, in source-image pixels.
+        y: Top edge of the region, in source-image pixels.
+        w: Width of the region, in source-image pixels.
+        h: Height of the region, in source-image pixels.
+        scale: Upscale factor applied after cropping (3-5 works well for small text).
+    """
+    from PIL import Image
+    from google.genai import types
+
+    path = _resolve_image(image_path)
+    if not path.exists():
+        return {"error": f"image not found: {image_path}"}
+    with Image.open(path) as im:
+        im = im.convert("RGB")
+        x0, y0 = max(0, x), max(0, y)
+        x1, y1 = min(im.width, x + w), min(im.height, y + h)
+        if x1 <= x0 or y1 <= y0:
+            return {"error": f"region ({x},{y},{w},{h}) does not overlap the image ({im.width}x{im.height})"}
+        crop = im.crop((x0, y0, x1, y1))
+
+        target_w, target_h = crop.width * scale, crop.height * scale
+        effective_scale = scale
+        if target_w > MAX_IMAGE_EDGE or target_h > MAX_IMAGE_EDGE:
+            effective_scale = min(MAX_IMAGE_EDGE / crop.width, MAX_IMAGE_EDGE / crop.height)
+            target_w = max(1, round(crop.width * effective_scale))
+            target_h = max(1, round(crop.height * effective_scale))
+        crop = crop.resize((target_w, target_h), Image.LANCZOS)
+        buf = io.BytesIO()
+        crop.save(buf, format="PNG")
+
+    return {
+        "region": [x0, y0, x1 - x0, y1 - y0],
+        "scale": round(effective_scale, 2),
+        "image": types.Part.from_bytes(data=buf.getvalue(), mime_type="image/png"),
+    }
 
 
 def sample_color_at(image_path: str, x: int, y: int) -> dict:
@@ -222,13 +315,18 @@ def validate_drawio(output_name: str) -> dict:
 
 
 def sanity_plot(output_name: str) -> dict:
-    """Render a rough, schematic PNG preview of the saved diagram JSON for a final visual sanity check.
+    """Render a rough, schematic PNG preview of the saved diagram JSON, returned to you for a real visual check.
 
     This is a quick matplotlib plot of node/edge positions — colors and
     rough placement only, not final draw.io fidelity (edges are drawn
-    straight, not orthogonally routed). Use it to catch gross mistakes:
-    overlapping boxes, a node in the wrong region, a missing node — compare
-    it mentally against what you read from the source image.
+    straight, not orthogonally routed). The image is returned to you
+    directly: actually look at it and compare it against the source image
+    (use inspect_region on the source again if you need a refresher on any
+    area) before finishing. If you spot a missing node, wrong region, wrong
+    count, or a badly-shaped element (e.g. a Venn diagram that came out as
+    disconnected circles instead of overlapping ones), fix the diagram and
+    call save_diagram -> render_drawio -> validate_drawio -> sanity_plot
+    again rather than accepting a mismatch.
 
     Args:
         output_name: Base filename used in save_diagram, e.g. "img_7".
@@ -283,5 +381,15 @@ def sanity_plot(output_name: str) -> dict:
     plt.tight_layout()
     out_path = DIAGRAMS_DIR / f"{output_name}.sanity.png"
     plt.savefig(out_path, dpi=150)
+    buf = io.BytesIO()
+    plt.savefig(buf, format="png", dpi=150)
     plt.close(fig)
-    return {"path": str(out_path)}
+
+    from google.genai import types
+
+    return {
+        "path": str(out_path),
+        "node_count": len(diagram["nodes"]),
+        "edge_count": len(diagram["edges"]),
+        "image": types.Part.from_bytes(data=_clamp_image_bytes(buf.getvalue()), mime_type="image/png"),
+    }
