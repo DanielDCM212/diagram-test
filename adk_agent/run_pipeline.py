@@ -4,7 +4,7 @@ Usage:
     python -m adk_agent.run_pipeline img_7.png [img_8.png ...]
     python -m adk_agent.run_pipeline            # processes every images/*.png
 
-Requires a GOOGLE_API_KEY (from https://aistudio.google.com/apikey) in
+Requires an ANTHROPIC_API_KEY (from https://console.anthropic.com/settings/keys) in
 adk_agent/diagram_recreator/.env — copy .env.example and fill it in.
 """
 import asyncio
@@ -65,6 +65,8 @@ async def process_image(runner, image_path: Path, output_name: str) -> str:
 
 async def main(image_names: list[str]):
     _load_env()
+    if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     from google.adk.runners import InMemoryRunner
 
     from adk_agent.diagram_recreator.agent import root_agent

@@ -19,7 +19,7 @@ from typing import Optional
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 IMAGES_DIR = PROJECT_ROOT / "images"
-DIAGRAMS_DIR = PROJECT_ROOT / "diagrams"
+DIAGRAMS_DIR = PROJECT_ROOT / "diagramsTest"
 DIAGRAMS_DIR.mkdir(exist_ok=True)
 
 if str(PROJECT_ROOT) not in sys.path:

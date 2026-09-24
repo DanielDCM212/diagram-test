@@ -1,4 +1,5 @@
 from google.adk.agents import LlmAgent
+from google.adk.models.anthropic_llm import AnthropicLlm
 
 from .tools import (
     find_bbox_of_color,
@@ -76,7 +77,11 @@ guessing:
 
 root_agent = LlmAgent(
     name="diagram_recreator",
-    model="gemini-2.5-flash",
+    # Explicit AnthropicLlm (direct Anthropic API, reads ANTHROPIC_API_KEY) rather
+    # than the bare string "claude-opus-5" -- ADK's model registry resolves that
+    # string to the Vertex-backed `Claude` class instead, which needs
+    # GOOGLE_CLOUD_PROJECT/GOOGLE_CLOUD_LOCATION, not an API key.
+    model=AnthropicLlm(model="claude-opus-5", max_tokens=16000),
     description="Recreates a diagram image as a validated draw.io (.drawio) file.",
     instruction=INSTRUCTION,
     tools=[
