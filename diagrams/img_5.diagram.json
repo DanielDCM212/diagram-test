@@ -1,0 +1,48 @@
+{
+  "name": "Microservices Sequence Diagram",
+  "nodes": [
+    {"id": "bg", "shape": "rect", "label": "", "x": 0, "y": 0, "w": 1630, "h": 1114, "fill": "#F7F9FF", "stroke": "none", "rounded": false},
+
+    {"id": "user_top", "shape": "rect", "label": "User", "x": 70, "y": 64, "w": 176, "h": 76, "fill": "#2DA2F7", "font_color": "#FFFFFF", "bold": true, "font_size": 14},
+    {"id": "gw_top", "shape": "rect", "label": "API Gateway", "x": 410, "y": 64, "w": 176, "h": 76, "fill": "#2DA2F7", "font_color": "#FFFFFF", "bold": true, "font_size": 14},
+    {"id": "svca_top", "shape": "rect", "label": "Service A", "x": 716, "y": 64, "w": 176, "h": 76, "fill": "#2DA2F7", "font_color": "#FFFFFF", "bold": true, "font_size": 14},
+    {"id": "svcb_top", "shape": "rect", "label": "Service B", "x": 950, "y": 64, "w": 176, "h": 76, "fill": "#2DA2F7", "font_color": "#FFFFFF", "bold": true, "font_size": 14},
+    {"id": "log_top", "shape": "rect", "label": "Logging Service", "x": 1184, "y": 64, "w": 175, "h": 76, "fill": "#2DA2F7", "font_color": "#FFFFFF", "bold": true, "font_size": 14},
+    {"id": "bus_top", "shape": "rect", "label": "Event Bus", "x": 1418, "y": 64, "w": 175, "h": 76, "fill": "#2DA2F7", "font_color": "#FFFFFF", "bold": true, "font_size": 14},
+
+    {"id": "user_bot", "shape": "rect", "label": "User", "x": 70, "y": 945, "w": 176, "h": 76, "fill": "#2DA2F7", "font_color": "#FFFFFF", "bold": true, "font_size": 14},
+    {"id": "gw_bot", "shape": "rect", "label": "API Gateway", "x": 410, "y": 945, "w": 176, "h": 76, "fill": "#2DA2F7", "font_color": "#FFFFFF", "bold": true, "font_size": 14},
+    {"id": "svca_bot", "shape": "rect", "label": "Service A", "x": 716, "y": 945, "w": 176, "h": 76, "fill": "#2DA2F7", "font_color": "#FFFFFF", "bold": true, "font_size": 14},
+    {"id": "svcb_bot", "shape": "rect", "label": "Service B", "x": 950, "y": 945, "w": 176, "h": 76, "fill": "#2DA2F7", "font_color": "#FFFFFF", "bold": true, "font_size": 14},
+    {"id": "log_bot", "shape": "rect", "label": "Logging Service", "x": 1184, "y": 945, "w": 175, "h": 76, "fill": "#2DA2F7", "font_color": "#FFFFFF", "bold": true, "font_size": 14},
+    {"id": "bus_bot", "shape": "rect", "label": "Event Bus", "x": 1418, "y": 945, "w": 175, "h": 76, "fill": "#2DA2F7", "font_color": "#FFFFFF", "bold": true, "font_size": 14},
+
+    {"id": "act_svca", "shape": "rect", "label": "", "x": 798, "y": 251, "w": 12, "h": 57, "fill": "#FFFFFF", "stroke": "#C8C8C8", "rounded": false},
+    {"id": "act_svcb", "shape": "rect", "label": "", "x": 1032, "y": 420, "w": 12, "h": 56, "fill": "#FFFFFF", "stroke": "#C8C8C8", "rounded": false},
+    {"id": "act_log", "shape": "rect", "label": "", "x": 1265.5, "y": 644, "w": 12, "h": 56, "fill": "#FFFFFF", "stroke": "#C8C8C8", "rounded": false},
+
+    {"id": "note", "shape": "rect", "label": "Note: API Gateway is the single entry point for all clients", "x": 251, "y": 769, "w": 493, "h": 39, "fill": "#3C5DAE", "font_color": "#FFFFFF", "bold": true, "rounded": true, "font_size": 12}
+  ],
+  "edges": [
+    {"id": "life_user", "source_point": [158, 140], "target_point": [158, 945], "dashed": true, "end_arrow": false, "color": "#AAAAAA"},
+    {"id": "life_gw", "source_point": [498, 140], "target_point": [498, 945], "dashed": true, "end_arrow": false, "color": "#AAAAAA"},
+    {"id": "life_svca", "source_point": [804, 140], "target_point": [804, 945], "dashed": true, "end_arrow": false, "color": "#AAAAAA"},
+    {"id": "life_svcb", "source_point": [1038, 140], "target_point": [1038, 945], "dashed": true, "end_arrow": false, "color": "#AAAAAA"},
+    {"id": "life_log", "source_point": [1271.5, 140], "target_point": [1271.5, 945], "dashed": true, "end_arrow": false, "color": "#AAAAAA"},
+    {"id": "life_bus", "source_point": [1505.5, 140], "target_point": [1505.5, 945], "dashed": true, "end_arrow": false, "color": "#AAAAAA"},
+
+    {"id": "m1", "source_point": [158, 195], "target_point": [498, 195], "label": "sends request", "end_arrow": true, "color": "#333333", "label_offset": [0, -10]},
+    {"id": "m2", "source_point": [498, 251], "target_point": [804, 251], "label": "routes request", "end_arrow": true, "color": "#333333", "label_offset": [0, -10]},
+    {"id": "m3", "source_point": [804, 308], "target_point": [498, 308], "label": "processes request", "dashed": true, "raw_style": "html=1;endArrow=open;dashed=1;strokeColor=#333333;fontColor=#333333;fontSize=11;edgeStyle=none;rounded=0;", "label_offset": [0, -10]},
+    {"id": "m4", "source_point": [498, 364], "target_point": [158, 364], "label": "sends response", "raw_style": "html=1;endArrow=open;dashed=1;strokeColor=#333333;fontColor=#333333;fontSize=11;edgeStyle=none;rounded=0;", "label_offset": [0, -10]},
+    {"id": "m5", "source_point": [498, 420], "target_point": [1038, 420], "label": "sends request", "end_arrow": true, "color": "#333333", "label_offset": [0, -10]},
+    {"id": "m6", "source_point": [1038, 476], "target_point": [498, 476], "label": "processes request", "raw_style": "html=1;endArrow=open;dashed=1;strokeColor=#333333;fontColor=#333333;fontSize=11;edgeStyle=none;rounded=0;", "label_offset": [0, -10]},
+    {"id": "m7", "source_point": [498, 532], "target_point": [158, 532], "label": "sends response", "raw_style": "html=1;endArrow=open;dashed=1;strokeColor=#333333;fontColor=#333333;fontSize=11;edgeStyle=none;rounded=0;", "label_offset": [0, -10]},
+    {"id": "m8", "source_point": [158, 588], "target_point": [498, 588], "label": "receives response", "end_arrow": true, "color": "#333333", "label_offset": [0, -10]},
+    {"id": "m9", "source_point": [498, 644], "target_point": [1271.5, 644], "label": "logs request and response", "end_arrow": true, "color": "#333333", "label_offset": [0, -10]},
+    {"id": "m10", "source_point": [1271.5, 700], "target_point": [498, 700], "label": "stores logs", "raw_style": "html=1;endArrow=open;dashed=1;strokeColor=#333333;fontColor=#333333;fontSize=11;edgeStyle=none;rounded=0;", "label_offset": [0, -10]},
+    {"id": "m11", "source_point": [498, 756], "target_point": [158, 756], "label": "confirms log storage", "raw_style": "html=1;endArrow=open;dashed=1;strokeColor=#333333;fontColor=#333333;fontSize=11;edgeStyle=none;rounded=0;", "label_offset": [0, -10]},
+    {"id": "m12", "source_point": [158, 865], "target_point": [498, 865], "label": "initiates asynchronous request", "end_arrow": true, "color": "#333333", "label_offset": [0, -10]},
+    {"id": "m13", "source_point": [498, 921], "target_point": [1505.5, 921], "label": "sends message", "end_arrow": true, "color": "#333333", "label_offset": [0, -10]}
+  ]
+}

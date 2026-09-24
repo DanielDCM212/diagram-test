@@ -1,0 +1,34 @@
+{
+  "name": "ATM Withdraw Cash Sequence",
+  "nodes": [
+    {"id": "hdr_cust", "shape": "rect", "label": "cust:Customer", "x": 10, "y": 10, "w": 123, "h": 40, "fill": "#FFFFFF", "stroke": "#10387A", "font_color": "#10387A", "bold": true, "rounded": false, "font_size": 12},
+    {"id": "hdr_teller", "shape": "rect", "label": "teller:ATM", "x": 300, "y": 10, "w": 124, "h": 40, "fill": "#FFFFFF", "stroke": "#10387A", "font_color": "#10387A", "bold": true, "rounded": false, "font_size": 12},
+    {"id": "hdr_bank", "shape": "rect", "label": "thierBank:Bank", "x": 580, "y": 10, "w": 125, "h": 40, "fill": "#FFFFFF", "stroke": "#10387A", "font_color": "#10387A", "bold": true, "rounded": false, "font_size": 12},
+
+    {"id": "frame_balance", "shape": "rect", "label": "ref", "x": 530, "y": 180, "w": 220, "h": 70, "raw_style": "shape=umlFrame;whiteSpace=wrap;html=1;width=40;height=20;fillColor=none;strokeColor=#10387A;fontColor=#10387A;verticalAlign=top;align=left;spacingLeft=4;fontSize=11;"},
+    {"id": "text_balance_inner", "shape": "text", "label": "Balance Lookup\n(accountNumber): Real", "x": 530, "y": 202, "w": 220, "h": 44, "align": "center", "font_size": 11},
+
+    {"id": "frame_opt", "shape": "rect", "label": "opt", "x": 235, "y": 320, "w": 545, "h": 209, "raw_style": "shape=umlFrame;whiteSpace=wrap;html=1;width=40;height=20;fillColor=none;strokeColor=#10387A;fontColor=#10387A;verticalAlign=top;align=left;spacingLeft=4;fontSize=11;"},
+    {"id": "text_opt_guard", "shape": "text", "label": "[balance > amount]", "x": 290, "y": 321, "w": 300, "h": 18, "align": "left", "bold": true, "font_size": 11},
+
+    {"id": "frame_debit", "shape": "rect", "label": "ref", "x": 455, "y": 410, "w": 275, "h": 64, "raw_style": "shape=umlFrame;whiteSpace=wrap;html=1;width=40;height=20;fillColor=none;strokeColor=#10387A;fontColor=#10387A;verticalAlign=top;align=left;spacingLeft=4;fontSize=11;"},
+    {"id": "text_debit_inner", "shape": "text", "label": "Debit Account (accountNumber,\namount)", "x": 455, "y": 424, "w": 275, "h": 40, "align": "center", "font_size": 11},
+
+    {"id": "act_cust", "shape": "rect", "label": "", "x": 64, "y": 75, "w": 14, "h": 489, "fill": "#FFFFFF", "stroke": "#10387A", "rounded": false},
+    {"id": "act_teller", "shape": "rect", "label": "", "x": 356, "y": 90, "w": 13, "h": 474, "fill": "#FFFFFF", "stroke": "#10387A", "rounded": false},
+    {"id": "act_bank1", "shape": "rect", "label": "", "x": 636, "y": 131, "w": 13, "h": 168, "fill": "#FFFFFF", "stroke": "#10387A", "rounded": false},
+    {"id": "act_bank2", "shape": "rect", "label": "", "x": 636, "y": 391, "w": 13, "h": 108, "fill": "#FFFFFF", "stroke": "#10387A", "rounded": false}
+  ],
+  "edges": [
+    {"id": "life_cust", "source_point": [71, 50], "target_point": [71, 575], "dashed": true, "end_arrow": false, "color": "#10387A"},
+    {"id": "life_teller", "source_point": [362, 50], "target_point": [362, 575], "dashed": true, "end_arrow": false, "color": "#10387A"},
+    {"id": "life_bank", "source_point": [642, 50], "target_point": [642, 575], "dashed": true, "end_arrow": false, "color": "#10387A"},
+
+    {"id": "msg1_withdraw", "source_point": [71, 90], "target_point": [356, 90], "label": "withdrawCash (accountNumber, amount)", "end_arrow": true, "color": "#10387A", "label_offset": [0, -10]},
+    {"id": "msg2_getbalance", "source_point": [369, 131], "target_point": [636, 131], "label": "getBalance (accountNumber): Real", "end_arrow": true, "color": "#10387A", "label_offset": [0, -10]},
+    {"id": "msg3_balance_return", "source_point": [636, 299], "target_point": [369, 299], "label": "balance", "dashed": true, "raw_style": "html=1;endArrow=open;dashed=1;startArrow=none;strokeColor=#10387A;fontColor=#10387A;fontSize=11;edgeStyle=none;rounded=0;", "label_offset": [0, -10]},
+    {"id": "msg4_debit", "source_point": [369, 391], "target_point": [636, 391], "label": "debit (accountNumber, account)", "end_arrow": true, "color": "#10387A", "label_offset": [0, -10]},
+    {"id": "msg5_debit_return", "source_point": [636, 499], "target_point": [369, 499], "dashed": true, "raw_style": "html=1;endArrow=open;dashed=1;startArrow=none;strokeColor=#10387A;fontColor=#10387A;fontSize=11;edgeStyle=none;rounded=0;"},
+    {"id": "msg6_cash", "source_point": [356, 563], "target_point": [71, 563], "label": "cash", "dashed": true, "raw_style": "html=1;endArrow=open;dashed=1;startArrow=none;strokeColor=#10387A;fontColor=#10387A;fontSize=11;edgeStyle=none;rounded=0;", "label_offset": [0, -10]}
+  ]
+}

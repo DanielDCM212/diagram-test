@@ -1,0 +1,57 @@
+{
+  "name": "Component Architecture View",
+  "nodes": [
+    {"id": "bg_frame", "shape": "rect", "label": "", "x": 2, "y": 4, "w": 681, "h": 610, "fill": "#FFFFFF", "stroke": "#000000", "rounded": false},
+    {"id": "bg_gray", "shape": "rect", "label": "", "x": 41, "y": 25, "w": 643, "h": 455, "fill": "#E1E1E1", "stroke": "#000000", "rounded": false},
+    {"id": "infra_lang", "shape": "rect", "label": "<i>«LanguageInfrastructure»</i><br><b>DacIntegratedMetamodelAPI</b>", "x": 41, "y": 482, "w": 270, "h": 44, "fill": "#FFFFFF", "stroke": "#000000", "rounded": false, "font_size": 10},
+    {"id": "infra_mococore", "shape": "rect", "label": "<i>«MoCoCore»</i><br><b>MoCoCoreAPI</b>", "x": 311, "y": 482, "w": 373, "h": 44, "fill": "#FFFFFF", "stroke": "#000000", "rounded": false, "font_size": 10},
+    {"id": "infra_modeling", "shape": "rect", "label": "<i>«ModelingInfrastructure»</i><br><b>JGraLab</b>", "x": 41, "y": 526, "w": 270, "h": 44, "fill": "#FFFFFF", "stroke": "#000000", "rounded": false, "font_size": 10},
+    {"id": "infra_component", "shape": "rect", "label": "<i>«ComponentInfrastructure»</i><br><b>Equinox</b>", "x": 311, "y": 526, "w": 373, "h": 44, "fill": "#FFFFFF", "stroke": "#000000", "rounded": false, "font_size": 10},
+    {"id": "infra_jvm", "shape": "rect", "label": "<i>«RuntimeEnvironment»</i><br><b>Java Virtual Machine</b>", "x": 41, "y": 570, "w": 643, "h": 44, "fill": "#FFFFFF", "stroke": "#000000", "rounded": false, "font_size": 10},
+
+    {"id": "lbl_left_upper", "shape": "text", "label": "MoCo-Based Software System", "x": 2, "y": 25, "w": 39, "h": 455, "vertical_text": true, "font_size": 11},
+    {"id": "lbl_left_lower", "shape": "text", "label": "MoCo\nInfrastructure", "x": 2, "y": 480, "w": 39, "h": 134, "vertical_text": true, "font_size": 11},
+
+    {"id": "title", "shape": "text", "label": "Component Architecture View", "x": 2, "y": 6, "w": 681, "h": 20, "bold": true, "font_size": 14},
+
+    {"id": "visualizer", "shape": "rect", "label": "<i>«MoCo»</i><br><b>DacVisualizer2D</b>", "x": 55, "y": 40, "w": 160, "h": 60, "raw_style": "shape=component;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;align=center;fontSize=11;"},
+    {"id": "ruleeditor", "shape": "rect", "label": "<i>«MoCo»</i><br><b>DacRuleEditor</b>", "x": 275, "y": 40, "w": 160, "h": 60, "raw_style": "shape=component;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;align=center;fontSize=11;"},
+    {"id": "commandline", "shape": "rect", "label": "<i>«Component»</i><br><b>DacCommandLine</b>", "x": 505, "y": 40, "w": 160, "h": 60, "raw_style": "shape=component;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;align=center;fontSize=11;"},
+
+    {"id": "controller", "shape": "rect", "label": "<i>«MoCo»</i><br><b>DacController</b>", "x": 225, "y": 155, "w": 170, "h": 110, "raw_style": "shape=component;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;align=center;fontSize=11;"},
+
+    {"id": "config", "shape": "rect", "label": "<i>«MoCo»</i><br><b>DacConfig</b>", "x": 505, "y": 155, "w": 160, "h": 60, "raw_style": "shape=component;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;align=center;fontSize=11;"},
+    {"id": "eventbus", "shape": "rect", "label": "<i>«Component»</i><br><b>DacEventBus</b>", "x": 505, "y": 270, "w": 160, "h": 60, "raw_style": "shape=component;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;align=center;fontSize=11;"},
+
+    {"id": "eventgen", "shape": "rect", "label": "<i>«MoCo»</i><br><b>DacEventGenerator</b>", "x": 245, "y": 300, "w": 160, "h": 60, "raw_style": "shape=component;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;align=center;fontSize=11;"},
+    {"id": "cameradriver", "shape": "rect", "label": "<i>«MoCo»</i><br><b>DacCameraDriver</b>", "x": 245, "y": 380, "w": 160, "h": 60, "raw_style": "shape=component;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;align=center;fontSize=11;"},
+
+    {"id": "modelrepo", "shape": "rect", "label": "<i>«MoCo»</i><br><b>DacModelRepository</b>", "x": 55, "y": 345, "w": 170, "h": 90, "raw_style": "shape=component;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;align=center;fontSize=11;"},
+    {"id": "cardreader", "shape": "rect", "label": "<i>«MoCo»</i><br><b>DacCardReaderDriver</b>", "x": 505, "y": 380, "w": 160, "h": 60, "raw_style": "shape=component;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;align=center;fontSize=11;"},
+
+    {"id": "port_adapt", "shape": "ellipse", "label": "", "x": 388, "y": 238, "w": 14, "h": 14, "fill": "#FFFFFF", "stroke": "#000000"},
+    {"id": "port_featureselect", "shape": "ellipse", "label": "", "x": 491, "y": 163, "w": 14, "h": 14, "fill": "#FFFFFF", "stroke": "#000000"},
+    {"id": "port_subscribe", "shape": "ellipse", "label": "", "x": 491, "y": 278, "w": 14, "h": 14, "fill": "#FFFFFF", "stroke": "#000000"},
+    {"id": "port_publish", "shape": "ellipse", "label": "", "x": 491, "y": 308, "w": 14, "h": 14, "fill": "#FFFFFF", "stroke": "#000000"},
+    {"id": "port_sensorinfo", "shape": "ellipse", "label": "", "x": 218, "y": 363, "w": 14, "h": 14, "fill": "#FFFFFF", "stroke": "#000000"},
+    {"id": "port_modelaccess", "shape": "ellipse", "label": "", "x": 218, "y": 403, "w": 14, "h": 14, "fill": "#FFFFFF", "stroke": "#000000"},
+
+    {"id": "lbl_featureselect", "shape": "text", "label": "«pFunction»\nIFeatureSelect", "x": 400, "y": 132, "w": 110, "h": 26, "font_size": 9},
+    {"id": "lbl_subscribe", "shape": "text", "label": "«pFunction»\nIEventSubscribe", "x": 400, "y": 248, "w": 110, "h": 26, "font_size": 9},
+    {"id": "lbl_publish", "shape": "text", "label": "«pFunction»\nIEventPublish", "x": 400, "y": 328, "w": 110, "h": 26, "font_size": 9},
+    {"id": "lbl_adaptation", "shape": "text", "label": "«pManage»\nIAdaptation", "x": 335, "y": 267, "w": 100, "h": 26, "font_size": 9},
+    {"id": "lbl_sensorinfo", "shape": "text", "label": "«pFunction»\nISensorInfo", "x": 95, "y": 328, "w": 110, "h": 26, "font_size": 9},
+    {"id": "lbl_modelaccess", "shape": "text", "label": "«pManage»\nIModelAccess", "x": 95, "y": 417, "w": 110, "h": 26, "font_size": 9}
+  ],
+  "edges": [
+    {"id": "e_vis_cmd", "source": "visualizer", "target": "commandline", "dashed": true, "end_arrow": false, "color": "#000000"},
+    {"id": "e_rule_cmd", "source": "ruleeditor", "target": "commandline", "dashed": true, "end_arrow": false, "color": "#000000"},
+    {"id": "e_cmd_adapt", "source": "commandline", "target": "port_adapt", "dashed": true, "end_arrow": true, "color": "#000000"},
+    {"id": "e_ctrl_featureselect", "source": "controller", "target": "port_featureselect", "dashed": true, "end_arrow": true, "color": "#000000"},
+    {"id": "e_ctrl_subscribe", "source": "controller", "target": "port_subscribe", "dashed": true, "end_arrow": true, "color": "#000000"},
+    {"id": "e_eventgen_publish", "source": "eventgen", "target": "port_publish", "dashed": true, "end_arrow": true, "color": "#000000"},
+    {"id": "e_camera_cardreader", "source": "cameradriver", "target": "cardreader", "dashed": true, "end_arrow": false, "color": "#000000"},
+    {"id": "e_ctrl_modelaccess", "source": "controller", "target": "port_modelaccess", "dashed": true, "end_arrow": true, "color": "#000000"},
+    {"id": "e_camera_sensorinfo", "source": "cameradriver", "target": "port_sensorinfo", "dashed": true, "end_arrow": true, "color": "#000000"}
+  ]
+}

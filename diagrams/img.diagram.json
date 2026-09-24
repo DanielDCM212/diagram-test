@@ -1,0 +1,71 @@
+{
+  "name": "IoT Data Platform Architecture",
+  "nodes": [
+    {"id": "t_acq", "shape": "text", "label": "Acquisition layer", "x": 10, "y": 6, "w": 300, "h": 26, "bold": true, "font_size": 16},
+    {"id": "t_proc", "shape": "text", "label": "Processing layer", "x": 350, "y": 6, "w": 260, "h": 26, "bold": true, "font_size": 16},
+    {"id": "t_util", "shape": "text", "label": "Utilization layer", "x": 655, "y": 6, "w": 220, "h": 26, "bold": true, "font_size": 16},
+
+    {"id": "device1", "shape": "ellipse", "label": "Device", "x": 118, "y": 90, "w": 30, "h": 30, "fill": "#FFFFFF", "stroke": "#000000", "font_size": 10},
+    {"id": "dot1_top", "shape": "ellipse", "label": "", "x": 112, "y": 62, "w": 12, "h": 12, "fill": "#97A0E8", "stroke": "#000000"},
+    {"id": "lbl1_top", "shape": "text", "label": "Sensor node", "x": 55, "y": 36, "w": 110, "h": 20, "align": "center", "font_size": 11},
+    {"id": "dot1_left", "shape": "ellipse", "label": "", "x": 66, "y": 92, "w": 12, "h": 12, "fill": "#97A0E8", "stroke": "#000000"},
+    {"id": "lbl1_left", "shape": "text", "label": "Sensor data", "x": 0, "y": 84, "w": 90, "h": 20, "align": "right", "font_size": 11},
+    {"id": "dot1_right", "shape": "ellipse", "label": "", "x": 172, "y": 76, "w": 12, "h": 12, "fill": "#97A0E8", "stroke": "#000000"},
+
+    {"id": "device2", "shape": "ellipse", "label": "Device", "x": 108, "y": 220, "w": 30, "h": 30, "fill": "#FFFFFF", "stroke": "#000000", "font_size": 10},
+    {"id": "dot2_top", "shape": "ellipse", "label": "", "x": 98, "y": 192, "w": 12, "h": 12, "fill": "#97A0E8", "stroke": "#000000"},
+    {"id": "lbl2_top", "shape": "text", "label": "Sensor node", "x": 40, "y": 166, "w": 110, "h": 20, "align": "center", "font_size": 11},
+    {"id": "dot2_left", "shape": "ellipse", "label": "", "x": 52, "y": 224, "w": 12, "h": 12, "fill": "#97A0E8", "stroke": "#000000"},
+    {"id": "lbl2_left", "shape": "text", "label": "Sensor data", "x": 0, "y": 233, "w": 76, "h": 20, "align": "right", "font_size": 11},
+    {"id": "dot2_right", "shape": "ellipse", "label": "", "x": 158, "y": 206, "w": 12, "h": 12, "fill": "#97A0E8", "stroke": "#000000"},
+
+    {"id": "lbl_dev1_gw", "shape": "text", "label": "Sensor data\n+Metadata", "x": 165, "y": 138, "w": 100, "h": 34, "align": "left", "font_size": 11},
+
+    {"id": "external", "shape": "rect", "label": "External sources/\nBusiness systems", "x": 67, "y": 295, "w": 154, "h": 42, "fill": "#128D9A", "font_color": "#FFFFFF", "bold": true, "rounded": false, "font_size": 11},
+
+    {"id": "gateway", "shape": "rect", "label": "Gateway", "x": 226, "y": 110, "w": 68, "h": 37, "fill": "#996A11", "font_color": "#FFFFFF", "bold": true, "rounded": false, "font_size": 11},
+
+    {"id": "datalake", "shape": "rect", "label": "Data lake", "x": 331, "y": 189, "w": 25, "h": 172, "fill": "#D98612", "font_color": "#FFFFFF", "bold": true, "vertical_text": true, "rounded": false, "font_size": 11},
+
+    {"id": "realtime", "shape": "rect", "label": "Real-time\ndata processing", "x": 430, "y": 101, "w": 111, "h": 56, "fill": "#248D45", "font_color": "#FFFFFF", "bold": true, "rounded": false},
+    {"id": "batch", "shape": "rect", "label": "Batch data\nprocessing", "x": 429, "y": 311, "w": 112, "h": 55, "fill": "#245B8D", "font_color": "#FFFFFF", "bold": true, "rounded": false},
+
+    {"id": "monitoring", "shape": "rect", "label": "Real-time\nmonitoring", "x": 684, "y": 101, "w": 95, "h": 55, "fill": "#3D89F6", "font_color": "#FFFFFF", "bold": true, "rounded": false},
+    {"id": "monitoring_note", "shape": "text", "label": "For Business use", "x": 664, "y": 161, "w": 135, "h": 18, "font_size": 10},
+
+    {"id": "analytics", "shape": "rect", "label": "Business\nanalytics/intelligence", "x": 684, "y": 311, "w": 95, "h": 54, "fill": "#843FF8", "font_color": "#FFFFFF", "bold": true, "rounded": false},
+    {"id": "analytics_note", "shape": "text", "label": "For Business use", "x": 664, "y": 370, "w": 135, "h": 18, "font_size": 10}
+  ],
+  "edges": [
+    {"id": "sep_line1", "source_point": [345, 0], "target_point": [345, 400], "dashed": true, "end_arrow": false, "color": "#B3B3B3"},
+    {"id": "sep_line2", "source_point": [655, 0], "target_point": [655, 400], "dashed": true, "end_arrow": false, "color": "#B3B3B3"},
+
+    {"id": "e_dot1_top_device1", "source": "dot1_top", "target": "device1", "end_arrow": true, "color": "#000000"},
+    {"id": "e_dot1_left_device1", "source": "dot1_left", "target": "device1", "end_arrow": true, "color": "#000000"},
+    {"id": "e_dot1_right_device1", "source": "dot1_right", "target": "device1", "end_arrow": true, "color": "#000000"},
+    {"id": "e_dot2_top_device2", "source": "dot2_top", "target": "device2", "end_arrow": true, "color": "#000000"},
+    {"id": "e_dot2_left_device2", "source": "dot2_left", "target": "device2", "end_arrow": true, "color": "#000000"},
+    {"id": "e_dot2_right_device2", "source": "dot2_right", "target": "device2", "end_arrow": true, "color": "#000000"},
+
+    {"id": "e_device1_gateway", "source": "device1", "target": "gateway", "dashed": true, "end_arrow": true, "color": "#333333"},
+    {"id": "e_device2_gateway", "source": "device2", "target": "gateway", "dashed": true, "end_arrow": true, "color": "#333333"},
+
+    {"id": "e_gateway_realtime", "source": "gateway", "target": "realtime", "label": "Sensor data\n+Metadata", "end_arrow": true, "label_offset": [0, 12]},
+    {"id": "e_realtime_gateway", "source": "realtime", "target": "gateway", "label": "data for control", "end_arrow": true, "label_offset": [0, -12]},
+
+    {"id": "e_gateway_datalake", "source": "gateway", "target": "datalake", "label": "Sensor data\n+Metadata", "end_arrow": true},
+    {"id": "e_external_datalake", "source": "external", "target": "datalake", "label": "External/\nbusiness data", "end_arrow": true},
+
+    {"id": "e_datalake_realtime_1", "source": "datalake", "target": "realtime", "label": "Sensor data\n+Metadata", "end_arrow": true, "label_offset": [0, -12]},
+    {"id": "e_datalake_realtime_2", "source": "datalake", "target": "realtime", "label": "External/\nbusiness data", "end_arrow": true, "label_offset": [0, 14]},
+
+    {"id": "e_realtime_batch", "source": "realtime", "target": "batch", "label": "Data processing\nresult", "end_arrow": true},
+    {"id": "e_batch_datalake", "source": "batch", "target": "datalake", "label": "Data processing\nresult", "end_arrow": true, "label_offset": [0, -12]},
+    {"id": "e_datalake_batch", "source": "datalake", "target": "batch", "label": "IoT Data", "end_arrow": true, "label_offset": [0, 12]},
+
+    {"id": "e_realtime_monitoring", "source": "realtime", "target": "monitoring", "label": "Data processing\nresult", "end_arrow": true},
+    {"id": "e_batch_analytics", "source": "batch", "target": "analytics", "label": "Data processing\nresult", "end_arrow": true},
+
+    {"id": "e_monitoring_analytics", "source": "monitoring", "target": "analytics", "label": "Data", "end_arrow": true, "start_arrow": true}
+  ]
+}

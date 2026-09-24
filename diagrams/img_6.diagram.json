@@ -1,0 +1,102 @@
+{
+  "name": "AGCN v1.8 Computational Model Process Diagram",
+  "nodes": [
+    {"id": "title1", "shape": "text", "label": "Part II: Computational Model Process Diagram (AGCN v1.8)", "x": 120, "y": 0, "w": 760, "h": 24, "bold": true, "font_size": 15},
+    {"id": "title2", "shape": "text", "label": "FIGURE 1: Simplified System Transformation and Verification Flow", "x": 120, "y": 22, "w": 760, "h": 20, "font_size": 12},
+
+    {"id": "input", "shape": "rect", "label": "INPUT:\nSOURCE DATA SUBSTRATE\n(e.g., initial array)", "x": 20, "y": 55, "w": 200, "h": 70, "fill": "#EFEFEF", "stroke": "#000000", "rounded": false, "font_size": 11, "bold": true},
+
+    {"id": "obs_title", "shape": "text", "label": "OBSERVATION SPACE (Projected View)", "x": 560, "y": 45, "w": 340, "h": 18, "bold": true, "font_size": 11},
+    {"id": "obs_h0", "shape": "rect", "label": "", "x": 560, "y": 65, "w": 70, "h": 20, "fill": "#FFFFFF", "stroke": "#000000", "rounded": false},
+    {"id": "obs_h1", "shape": "rect", "label": "Observation Time A", "x": 630, "y": 65, "w": 130, "h": 20, "fill": "#FFFFFF", "stroke": "#000000", "rounded": false, "font_size": 8},
+    {"id": "obs_h2", "shape": "rect", "label": "B", "x": 760, "y": 65, "w": 60, "h": 20, "fill": "#FFFFFF", "stroke": "#000000", "rounded": false, "font_size": 8},
+    {"id": "obs_h3", "shape": "rect", "label": "C", "x": 820, "y": 65, "w": 60, "h": 20, "fill": "#FFFFFF", "stroke": "#000000", "rounded": false, "font_size": 8},
+    {"id": "obs_r1l", "shape": "rect", "label": "State 1", "x": 560, "y": 85, "w": 70, "h": 20, "fill": "#FFFFFF", "stroke": "#000000", "rounded": false, "font_size": 8},
+    {"id": "obs_r1a", "shape": "rect", "label": "", "x": 630, "y": 85, "w": 130, "h": 20, "fill": "#FFFFFF", "stroke": "#000000", "rounded": false},
+    {"id": "obs_r1b", "shape": "rect", "label": "", "x": 760, "y": 85, "w": 60, "h": 20, "fill": "#FFFFFF", "stroke": "#000000", "rounded": false},
+    {"id": "obs_r1c", "shape": "rect", "label": "", "x": 820, "y": 85, "w": 60, "h": 20, "fill": "#FFFFFF", "stroke": "#000000", "rounded": false},
+    {"id": "obs_r2l", "shape": "rect", "label": "State 2", "x": 560, "y": 105, "w": 70, "h": 20, "fill": "#FFFFFF", "stroke": "#000000", "rounded": false, "font_size": 8},
+    {"id": "obs_r2a", "shape": "rect", "label": "", "x": 630, "y": 105, "w": 130, "h": 20, "fill": "#FFFFFF", "stroke": "#000000", "rounded": false},
+    {"id": "obs_r2b", "shape": "rect", "label": "", "x": 760, "y": 105, "w": 60, "h": 20, "fill": "#FFFFFF", "stroke": "#000000", "rounded": false},
+    {"id": "obs_r2c", "shape": "rect", "label": "", "x": 820, "y": 105, "w": 60, "h": 20, "fill": "#FFFFFF", "stroke": "#000000", "rounded": false},
+    {"id": "obs_r3l", "shape": "rect", "label": "State 3", "x": 560, "y": 125, "w": 70, "h": 20, "fill": "#FFFFFF", "stroke": "#000000", "rounded": false, "font_size": 8},
+    {"id": "obs_r3a", "shape": "rect", "label": "", "x": 630, "y": 125, "w": 130, "h": 20, "fill": "#FFFFFF", "stroke": "#000000", "rounded": false},
+    {"id": "obs_r3b", "shape": "rect", "label": "", "x": 760, "y": 125, "w": 60, "h": 20, "fill": "#FFFFFF", "stroke": "#000000", "rounded": false},
+    {"id": "obs_r3c", "shape": "rect", "label": "", "x": 820, "y": 125, "w": 60, "h": 20, "fill": "#FFFFFF", "stroke": "#000000", "rounded": false},
+    {"id": "obs_note", "shape": "text", "label": "Simplified projected\nview of state relations", "x": 910, "y": 90, "w": 150, "h": 34, "align": "left", "font_size": 9},
+
+    {"id": "ddgt1", "shape": "rect", "label": "DATA-DRIVEN GRAMMAR\nTRANSFORMATIONS", "x": 20, "y": 160, "w": 190, "h": 55, "fill": "#EAF0FA", "stroke": "#41719C", "rounded": false, "font_size": 10, "bold": true},
+    {"id": "ddgt2", "shape": "rect", "label": "DATA-DRIVEN GRAMMAR\nTRANSFORMATIONS", "x": 240, "y": 160, "w": 190, "h": 55, "fill": "#EAF0FA", "stroke": "#41719C", "rounded": false, "font_size": 10, "bold": true},
+    {"id": "pathways_lbl", "shape": "text", "label": "PROCESSING PATHWAYS", "x": 440, "y": 130, "w": 150, "h": 18, "font_size": 9, "bold": true},
+    {"id": "dynshift", "shape": "rect", "label": "DYNAMIC SHIFT/PERMUTATION\nTRANSFORMS", "x": 660, "y": 160, "w": 240, "h": 55, "fill": "#FBE9E9", "stroke": "#C00000", "rounded": false, "font_size": 10, "bold": true},
+
+    {"id": "derived", "shape": "rect", "label": "DERIVED STATE GENERATION\n(Transformation encoded state collection)", "x": 240, "y": 265, "w": 240, "h": 60, "fill": "#FFFFFF", "stroke": "#41719C", "rounded": false, "font_size": 9, "bold": true},
+    {"id": "dyngen_coll", "shape": "rect", "label": "DYNAMICALLY-GENERATED STATE\n(Dynamics encoded state collection)", "x": 660, "y": 265, "w": 240, "h": 60, "fill": "#FFFFFF", "stroke": "#C00000", "rounded": false, "font_size": 9, "bold": true},
+
+    {"id": "predicted", "shape": "rect", "label": "PREDICTED INTERSECTION", "x": 20, "y": 360, "w": 220, "h": 55, "fill": "#C9D6EA", "stroke": "#41719C", "rounded": false, "font_size": 10, "bold": true},
+    {"id": "grammar_int", "shape": "rect", "label": "GRAMMAR INTERSECTION\nSTATE SET", "x": 280, "y": 360, "w": 220, "h": 55, "fill": "#C9D6EA", "stroke": "#41719C", "rounded": false, "font_size": 10, "bold": true},
+    {"id": "dyngen_set", "shape": "rect", "label": "DYNAMICALLY-GENERATED\nSTATE SET", "x": 660, "y": 360, "w": 240, "h": 55, "fill": "#F3C9C9", "stroke": "#C00000", "rounded": false, "font_size": 10, "bold": true},
+    {"id": "empirical", "shape": "rect", "label": "EMPIRICAL STATUS:\n(Pending Verification)", "x": 930, "y": 340, "w": 150, "h": 90, "fill": "#FFFFFF", "stroke": "#000000", "rounded": false, "font_size": 9, "bold": true},
+
+    {"id": "xval_lbl", "shape": "text", "label": "CROSS-VALIDATION PATH\n(COMPUTATION CHECK)", "x": 470, "y": 430, "w": 210, "h": 32, "font_size": 10, "bold": true},
+    {"id": "xval_sub", "shape": "text", "label": "Test if [Grammar Transformation then Dynamics] equals\n[Dynamics then Grammar Transformation] (no G_I or T_M)", "x": 240, "y": 465, "w": 480, "h": 32, "font_size": 9, "font_color": "#C00000"},
+
+    {"id": "principles_title", "shape": "text", "label": "CORE COMPUTATIONAL PRINCIPLES (Simplified)", "x": 20, "y": 520, "w": 440, "h": 22, "bold": true, "font_size": 12, "align": "left"},
+    {"id": "principles_body", "shape": "text", "label": "– Define Data Input: (No vector size)\n– State Representation Mapping\n– Grammar Transformations: Element-wise rule set (e.g., simple re-labeling rules)\n– Dynamic Transformations: Position shifting pattern (e.g., complex permutation rule)\n– Cross-Validation: Testing transformation order independence\n– Set Analysis: Categorizing generated state collections.", "x": 20, "y": 545, "w": 500, "h": 150, "font_size": 10, "align": "left"},
+
+    {"id": "venn_title", "shape": "text", "label": "INTERSECTION GEOMETRY", "x": 660, "y": 445, "w": 300, "h": 22, "bold": true, "font_size": 13},
+
+    {"id": "circle_G", "shape": "ellipse", "label": "", "x": 600, "y": 485, "w": 220, "h": 220, "raw_style": "ellipse;whiteSpace=wrap;html=1;fillColor=#4472C4;strokeColor=#2F528F;fillOpacity=55;fontSize=1;"},
+    {"id": "circle_T", "shape": "ellipse", "label": "", "x": 750, "y": 485, "w": 220, "h": 220, "raw_style": "ellipse;whiteSpace=wrap;html=1;fillColor=#C0504D;strokeColor=#8C3A38;fillOpacity=55;fontSize=1;"},
+    {"id": "circle_bottom", "shape": "ellipse", "label": "", "x": 675, "y": 600, "w": 220, "h": 180, "raw_style": "ellipse;whiteSpace=wrap;html=1;fillColor=#70AD47;strokeColor=#4C7A30;fillOpacity=55;fontSize=1;"},
+
+    {"id": "lbl_OG", "shape": "text", "label": "O_G", "x": 640, "y": 465, "w": 60, "h": 20, "font_size": 12, "bold": true},
+    {"id": "lbl_OT", "shape": "text", "label": "O_T", "x": 850, "y": 465, "w": 60, "h": 20, "font_size": 12, "bold": true},
+    {"id": "lbl_O17", "shape": "text", "label": "O_17", "x": 700, "y": 745, "w": 60, "h": 20, "font_size": 12, "bold": true},
+    {"id": "lbl_O0", "shape": "text", "label": "O_0", "x": 810, "y": 745, "w": 60, "h": 20, "font_size": 12, "bold": true},
+
+    {"id": "num_117", "shape": "text", "label": "117", "x": 640, "y": 555, "w": 60, "h": 24, "font_size": 14, "bold": true},
+    {"id": "num_36", "shape": "text", "label": "36", "x": 870, "y": 555, "w": 60, "h": 24, "font_size": 14, "bold": true},
+    {"id": "num_16a", "shape": "text", "label": "16", "x": 755, "y": 580, "w": 50, "h": 22, "font_size": 13, "bold": true},
+    {"id": "num_16b", "shape": "text", "label": "16", "x": 710, "y": 630, "w": 50, "h": 22, "font_size": 13, "bold": true},
+    {"id": "num_20", "shape": "text", "label": "20", "x": 760, "y": 660, "w": 50, "h": 22, "font_size": 13, "bold": true},
+
+    {"id": "cap_left_top", "shape": "text", "label": "O_G \\ O_T\n(grammar-exclusive)", "x": 400, "y": 480, "w": 190, "h": 34, "align": "left", "font_size": 10},
+    {"id": "cap_left_mid", "shape": "text", "label": "O_17 \\ O_0\nFinal Step Exclusive", "x": 400, "y": 555, "w": 190, "h": 34, "align": "left", "font_size": 10},
+    {"id": "cap_left_bottom", "shape": "text", "label": "O_T \\ O_G\n(dynamic-exclusive)", "x": 400, "y": 645, "w": 190, "h": 34, "align": "left", "font_size": 10},
+    {"id": "cap_right_top", "shape": "text", "label": "O_G \\ O_T\nFinal Step Exclusive", "x": 950, "y": 500, "w": 190, "h": 34, "align": "left", "font_size": 10},
+    {"id": "cap_right_mid", "shape": "text", "label": "O_17 \\ O_0\nOrigin Step Exclusive", "x": 950, "y": 570, "w": 190, "h": 34, "align": "left", "font_size": 10},
+    {"id": "cap_right_bottom", "shape": "text", "label": "O_0 \\ O_17\nExclusively from\nState Set A/B", "x": 950, "y": 630, "w": 190, "h": 48, "align": "left", "font_size": 10},
+
+    {"id": "venn_caption", "shape": "text", "label": "Figure Detail: State Interaction Analysis", "x": 660, "y": 800, "w": 300, "h": 20, "font_size": 10}
+  ],
+  "edges": [
+    {"id": "e_input_obs", "source": "input", "target": "obs_title", "label": "MAP & PROJECT", "end_arrow": true},
+    {"id": "e_input_ddgt1", "source": "input", "target": "ddgt1", "end_arrow": true},
+    {"id": "e_ddgt1_ddgt2", "source": "ddgt1", "target": "ddgt2", "end_arrow": true},
+    {"id": "e_pathways", "source": "ddgt2", "target": "obs_title", "label": "", "end_arrow": true, "dashed": true, "color": "#555555"},
+    {"id": "e_obs_dynshift", "source": "obs_title", "target": "dynshift", "end_arrow": true, "color": "#C00000"},
+    {"id": "e_ddgt2_dynshift", "source": "ddgt2", "target": "dynshift", "end_arrow": true, "color": "#C00000"},
+
+    {"id": "e_ddgt2_derived", "source": "ddgt2", "target": "derived", "label": "ENCODE TRANSFORMATION", "end_arrow": true},
+    {"id": "e_dynshift_dyngencoll", "source": "dynshift", "target": "dyngen_coll", "label": "ENCODE DYNAMICS", "end_arrow": true, "color": "#C00000"},
+    {"id": "e_derived_dyngencoll", "source": "derived", "target": "dyngen_coll", "end_arrow": true},
+
+    {"id": "e_ddgt1_predicted", "source": "ddgt1", "target": "predicted", "end_arrow": true},
+
+    {"id": "e_derived_grammarint", "source": "derived", "target": "grammar_int", "label": "VERIFY TRANSFORMATIONS", "end_arrow": true},
+    {"id": "e_dyngencoll_dyngenset", "source": "dyngen_coll", "target": "dyngen_set", "label": "VERIFY DYNAMICS", "end_arrow": true, "color": "#C00000"},
+    {"id": "e_grammarint_predicted", "source": "grammar_int", "target": "predicted", "end_arrow": true},
+
+    {"id": "e_dyngenset_grammarint", "source": "dyngen_set", "target": "grammar_int", "label": "CROSS-VALIDATION PATH\n(COMPUTATION CHECK)", "end_arrow": true, "color": "#C00000"},
+    {"id": "e_dyngenset_predicted", "source": "dyngen_set", "target": "predicted", "end_arrow": true},
+
+    {"id": "e_obs_note", "source_point": [905, 100], "target_point": [890, 115], "end_arrow": false, "color": "#555555"},
+
+    {"id": "e_cap_left_top", "source_point": [590, 495], "target_point": [660, 570], "end_arrow": false, "color": "#333333"},
+    {"id": "e_cap_left_mid", "source_point": [590, 570], "target_point": [720, 615], "end_arrow": false, "color": "#333333"},
+    {"id": "e_cap_left_bottom", "source_point": [590, 660], "target_point": [735, 650], "end_arrow": false, "color": "#333333"},
+    {"id": "e_cap_right_top", "source_point": [950, 515], "target_point": [890, 540], "end_arrow": false, "color": "#333333"},
+    {"id": "e_cap_right_bottom", "source_point": [950, 650], "target_point": [810, 630], "end_arrow": false, "color": "#333333"}
+  ]
+}
