@@ -114,7 +114,17 @@ root_agent = LlmAgent(
     # than the bare string "claude-sonnet-5" -- ADK's model registry resolves that
     # string to the Vertex-backed `Claude` class instead, which needs
     # GOOGLE_CLOUD_PROJECT/GOOGLE_CLOUD_LOCATION, not an API key.
-    model=AnthropicLlm(model="claude-sonnet-5", max_tokens=16000),
+    # max_tokens must cover a save_diagram call's whole JSON payload (every
+    # node/edge, raw_style strings, etc.) in one turn -- a dense diagram (30+
+    # elements) plus preceding thinking/text tokens can exceed 16000, which
+    # truncates the streamed tool-call JSON mid-object. ADK then fails to
+    # parse it ("Invalid JSON: ..."), and the model's next attempt sometimes
+    # lands with no parsed arguments at all, tripping ADK's own mandatory-arg
+    # check ("save_diagram() failed as the following mandatory input
+    # parameters are not present: diagram, output_name"). claude-sonnet-5
+    # supports up to 128K output tokens; ADK's AnthropicLlm already streams
+    # internally, so a larger budget here is safe.
+    model=AnthropicLlm(model="claude-sonnet-5", max_tokens=64000),
     description="Recreates a diagram image as a validated draw.io (.drawio) file.",
     instruction=INSTRUCTION,
     before_model_callback=clamp_request_images,

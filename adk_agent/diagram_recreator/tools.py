@@ -27,6 +27,7 @@ not assumed.
 """
 import io
 import json
+import re
 import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -322,6 +323,76 @@ def find_bbox_of_color(
         }
 
 
+# Node/edge geometry is extracted directly in native source-image pixel
+# coordinates (inspect_region, find_bbox_of_color, sample_color_at all work
+# in that same space, and the model places x/y/w/h to match). But font_size
+# (schema.py DiagramNode/DiagramEdge) is a small fixed range, ~10-14, that is
+# never scaled to the source resolution -- it only looks right when the
+# source image is roughly normal size. For a large source (e.g. a 5760x3240
+# HiDPI screenshot) shapes come out several times bigger than that
+# calibration while text stays the same absolute size, so the result reads
+# as "same canvas, unreadably small text" even though font_size itself is
+# fine. Rescaling geometry down to a consistent logical size restores the
+# shape-to-text ratio regardless of the source image's actual resolution.
+# Chosen to sit above every existing diagram's extent in this repo (~1630px
+# max) so normal-sized diagrams are left untouched.
+_MAX_DIAGRAM_EDGE = 2000.0
+
+# raw_style properties that describe a decorative/structural pixel size (not
+# text metrics) and should scale down with geometry so borders stay
+# proportional to their now-smaller shapes -- e.g. AWS group/container boxes
+# commonly set strokeWidth=2, which looks chunky relative to a shape shrunk
+# to a third of its extracted size. Deliberately excludes fontSize/spacing*,
+# which must stay fixed for the same reason font_size itself isn't scaled.
+_SCALE_SENSITIVE_STYLE_KEYS = ("strokeWidth", "startSize", "endSize")
+_STYLE_KEY_RE = re.compile(
+    r"(" + "|".join(_SCALE_SENSITIVE_STYLE_KEYS) + r")=([\d.]+)"
+)
+
+
+def _scale_raw_style(raw_style: str, scale: float) -> str:
+    return _STYLE_KEY_RE.sub(
+        lambda m: f"{m.group(1)}={float(m.group(2)) * scale:.2f}", raw_style
+    )
+
+
+def _rescale_diagram(diagram: Diagram) -> Optional[float]:
+    """Uniformly downscale node/edge geometry if the diagram's extent exceeds _MAX_DIAGRAM_EDGE.
+
+    Returns the scale factor applied, or None if no rescale was needed.
+    """
+    max_extent = max(
+        (n.x + n.w for n in diagram.nodes), default=0.0,
+    )
+    max_extent = max(max_extent, max((n.y + n.h for n in diagram.nodes), default=0.0))
+    for e in diagram.edges:
+        for pt in (e.source_point, e.target_point):
+            if pt:
+                max_extent = max(max_extent, pt[0], pt[1])
+
+    if max_extent <= _MAX_DIAGRAM_EDGE:
+        return None
+
+    scale = _MAX_DIAGRAM_EDGE / max_extent
+    for n in diagram.nodes:
+        n.x *= scale
+        n.y *= scale
+        n.w *= scale
+        n.h *= scale
+        if n.raw_style:
+            n.raw_style = _scale_raw_style(n.raw_style, scale)
+    for e in diagram.edges:
+        if e.source_point:
+            e.source_point = (e.source_point[0] * scale, e.source_point[1] * scale)
+        if e.target_point:
+            e.target_point = (e.target_point[0] * scale, e.target_point[1] * scale)
+        if e.label_offset:
+            e.label_offset = (e.label_offset[0] * scale, e.label_offset[1] * scale)
+        if e.raw_style:
+            e.raw_style = _scale_raw_style(e.raw_style, scale)
+    return scale
+
+
 def save_diagram(diagram: Diagram, output_name: str) -> dict:
     """Validate and save the extracted diagram structure as JSON.
 
@@ -343,6 +414,8 @@ def save_diagram(diagram: Diagram, output_name: str) -> dict:
     if isinstance(diagram, str):
         diagram = Diagram.model_validate_json(diagram)
 
+    applied_scale = _rescale_diagram(diagram)
+
     node_ids = {n.id for n in diagram.nodes}
     errors = []
     for e in diagram.edges:
@@ -359,7 +432,10 @@ def save_diagram(diagram: Diagram, output_name: str) -> dict:
 
     out_path = DIAGRAMS_DIR / f"{output_name}.diagram.json"
     out_path.write_text(json.dumps(diagram.model_dump(exclude_none=True), indent=2), encoding="utf-8")
-    return {"saved": True, "path": str(out_path), "nodes": len(diagram.nodes), "edges": len(diagram.edges)}
+    result = {"saved": True, "path": str(out_path), "nodes": len(diagram.nodes), "edges": len(diagram.edges)}
+    if applied_scale is not None:
+        result["rescaled"] = round(applied_scale, 4)
+    return result
 
 
 def render_drawio(output_name: str) -> dict:
