@@ -115,6 +115,15 @@ def _to_int(value) -> int:
     return int(float(value)) if isinstance(value, str) else int(value)
 
 
+def _to_float(value) -> float:
+    """Coerce a possibly-stringified numeric tool argument to float.
+
+    Unlike _to_int, this preserves fractional values (e.g. a sub-1 `scale`
+    meant to downscale a large region) instead of truncating them to 0.
+    """
+    return float(value)
+
+
 def _resolve_image(image_path: str) -> Path:
     p = Path(image_path)
     if not p.is_absolute():
@@ -142,7 +151,7 @@ def get_image_size(image_path: str) -> dict:
         return {"width": im.width, "height": im.height}
 
 
-def inspect_region(image_path: str, x: int, y: int, w: int, h: int, scale: int = 4) -> dict:
+def inspect_region(image_path: str, x: int, y: int, w: int, h: int, scale: float = 4) -> dict:
     """Crop a region of the source image and zoom in, so you can actually read small/dense detail.
 
     Use this whenever a region has small text, a table, a legend with many
@@ -164,11 +173,14 @@ def inspect_region(image_path: str, x: int, y: int, w: int, h: int, scale: int =
         w: Width of the region, in source-image pixels.
         h: Height of the region, in source-image pixels.
         scale: Upscale factor applied after cropping (3-5 works well for small text).
+            Can be fractional (e.g. 0.4) to downscale a large region instead —
+            useful for a quick overview crop rather than a full-resolution zoom.
     """
     from PIL import Image
     from google.genai import types
 
-    x, y, w, h, scale = _to_int(x), _to_int(y), _to_int(w), _to_int(h), _to_int(scale)
+    x, y, w, h = _to_int(x), _to_int(y), _to_int(w), _to_int(h)
+    scale = _to_float(scale)
 
     path = _resolve_image(image_path)
     if not path.exists():
@@ -185,8 +197,13 @@ def inspect_region(image_path: str, x: int, y: int, w: int, h: int, scale: int =
         effective_scale = scale
         if target_w > MAX_IMAGE_EDGE or target_h > MAX_IMAGE_EDGE:
             effective_scale = min(MAX_IMAGE_EDGE / crop.width, MAX_IMAGE_EDGE / crop.height)
-            target_w = max(1, round(crop.width * effective_scale))
-            target_h = max(1, round(crop.height * effective_scale))
+            target_w = crop.width * effective_scale
+            target_h = crop.height * effective_scale
+        # Floor unconditionally, not just in the branch above -- a small/fractional
+        # `scale` (e.g. 0.4 requested to downscale a huge region) can land here with
+        # target_w/target_h under 1 without ever exceeding MAX_IMAGE_EDGE, and
+        # Image.resize raises "height and width must be > 0" on a (0, 0) target.
+        target_w, target_h = max(1, round(target_w)), max(1, round(target_h))
         crop = crop.resize((target_w, target_h), Image.LANCZOS)
         buf = io.BytesIO()
         crop.save(buf, format="PNG")
