@@ -356,6 +356,16 @@ def _scale_raw_style(raw_style: str, scale: float) -> str:
     )
 
 
+# The uniform scale factor is derived only from the diagram's overall extent,
+# not from any individual node -- so a small element (e.g. a thin connector
+# label) shrinks by the same factor as everything else, which can push it
+# below what its (deliberately unscaled) font needs to render one line
+# without overflowing into a neighboring shape. Floor matches the smallest
+# node size actually seen working in this repo's existing diagrams (24x20 in
+# diagrams/img_1.diagram.json), rather than a guess.
+_MIN_NODE_W, _MIN_NODE_H = 24.0, 20.0
+
+
 def _rescale_diagram(diagram: Diagram) -> Optional[float]:
     """Uniformly downscale node/edge geometry if the diagram's extent exceeds _MAX_DIAGRAM_EDGE.
 
@@ -379,6 +389,12 @@ def _rescale_diagram(diagram: Diagram) -> Optional[float]:
         n.y *= scale
         n.w *= scale
         n.h *= scale
+        if n.w < _MIN_NODE_W:
+            n.x -= (_MIN_NODE_W - n.w) / 2
+            n.w = _MIN_NODE_W
+        if n.h < _MIN_NODE_H:
+            n.y -= (_MIN_NODE_H - n.h) / 2
+            n.h = _MIN_NODE_H
         if n.raw_style:
             n.raw_style = _scale_raw_style(n.raw_style, scale)
     for e in diagram.edges:
