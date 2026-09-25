@@ -334,6 +334,15 @@ def save_diagram(diagram: Diagram, output_name: str) -> dict:
         diagram: The full extracted diagram (nodes + edges).
         output_name: Base filename to save as, e.g. "img_7" -> diagrams/img_7.diagram.json.
     """
+    # For a large/deeply-nested tool argument like this one, Claude occasionally
+    # emits the whole structure as an escaped JSON string instead of a native
+    # nested object. ADK's preprocess_args tries Diagram.model_validate(...) on
+    # it, that raises (a str isn't a mapping), and it only logs a warning and
+    # silently leaves the raw string in place rather than erroring -- so this
+    # tool must defend itself or it hits "str object has no attribute 'nodes'".
+    if isinstance(diagram, str):
+        diagram = Diagram.model_validate_json(diagram)
+
     node_ids = {n.id for n in diagram.nodes}
     errors = []
     for e in diagram.edges:
