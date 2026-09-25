@@ -194,35 +194,53 @@ def sample_color_at(image_path: str, x: int, y: int) -> dict:
 def find_bbox_of_color(
     image_path: str,
     hex_color: str,
-    region: Optional[list[int]] = None,
+    x: Optional[int] = None,
+    y: Optional[int] = None,
+    w: Optional[int] = None,
+    h: Optional[int] = None,
     tolerance: int = 12,
 ) -> dict:
     """Find the tight bounding box of a fill color, to get exact shape geometry instead of eyeballing it.
 
     Scans pixels matching hex_color (within `tolerance` per channel) and returns
-    the bounding box of all matches. Restrict `region` to roughly where you
-    expect the shape to be — otherwise anti-aliased edges of unrelated same-ish
-    colored elements elsewhere in the image can pollute the result; if the
-    returned box looks too big/sparse (low pixel_count relative to its area),
-    narrow `region` and retry.
+    the bounding box of all matches. Restrict the search to roughly where you
+    expect the shape to be — via x/y/w/h, same convention as inspect_region —
+    otherwise anti-aliased edges of unrelated same-ish colored elements
+    elsewhere in the image can pollute the result; if the returned box looks
+    too big/sparse (low pixel_count relative to its area), narrow the region
+    and retry.
 
     Args:
         image_path: Path to the image, relative to the project root or just the filename in images/.
         hex_color: Color to search for, e.g. "#248D45".
-        region: Optional [x0, y0, x1, y1] to restrict the search to.
+        x: Left edge of the region to restrict the search to, in source-image pixels. Omit to search the whole image.
+        y: Top edge of the region, in source-image pixels.
+        w: Width of the region, in source-image pixels.
+        h: Height of the region, in source-image pixels.
         tolerance: Max per-channel difference to still count as a match.
     """
     from PIL import Image
 
     tolerance = _to_int(tolerance)
-    region = [_to_int(v) for v in region] if region else None
+    has_region = None not in (x, y, w, h)
 
     path = _resolve_image(image_path)
     if not path.exists():
         return {"error": f"image not found: {image_path}"}
     with Image.open(path) as im:
         im = im.convert("RGB")
-        x0, y0, x1, y1 = region if region else (0, 0, im.width, im.height)
+        if has_region:
+            x0, y0 = max(0, _to_int(x)), max(0, _to_int(y))
+            x1, y1 = min(im.width, x0 + _to_int(w)), min(im.height, y0 + _to_int(h))
+        else:
+            x0, y0, x1, y1 = 0, 0, im.width, im.height
+        if x1 <= x0 or y1 <= y0:
+            return {
+                "error": (
+                    f"region (x={x}, y={y}, w={w}, h={h}) does not overlap the image "
+                    f"({im.width}x{im.height})"
+                )
+            }
         crop = im.crop((x0, y0, x1, y1))
         target = tuple(int(hex_color.lstrip("#")[i : i + 2], 16) for i in (0, 2, 4))
 

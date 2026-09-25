@@ -63,11 +63,12 @@ guessing:
 
 4. Measure, don't eyeball. For every shape with a distinct solid fill, call
    sample_color_at at a point well inside it (away from borders/text) to get
-   the exact hex color, and find_bbox_of_color (restricted to a `region`
-   roughly where you expect the shape) to get its exact x/y/w/h instead of
-   guessing coordinates. Use get_image_size first to know the canvas extent.
-   If find_bbox_of_color returns a box that looks too big/sparse for what
-   you expected, narrow `region` and retry rather than trusting it blindly.
+   the exact hex color, and find_bbox_of_color (restricted via x/y/w/h,
+   same convention as inspect_region, to roughly where you expect the shape)
+   to get its exact x/y/w/h instead of guessing coordinates. Use
+   get_image_size first to know the canvas extent. If find_bbox_of_color
+   returns a box that looks too big/sparse for what you expected, narrow
+   x/y/w/h and retry rather than trusting it blindly.
    For thin-stroke/white-fill shapes where color-matching doesn't help
    (common in UML and line-art diagrams), fall back to reading positions
    directly off an inspect_region crop instead of guessing.
