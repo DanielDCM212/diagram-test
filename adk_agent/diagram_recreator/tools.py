@@ -45,13 +45,16 @@ from scripts.json_to_drawio import render as render_mxgraph_xml  # noqa: E402
 from .schema import Diagram  # noqa: E402
 
 
-# Anthropic rejects a request with multiple images if any of them exceeds
-# 2000px on a side ("max allowed size for many-image requests"); 1568px is
-# their documented long-edge recommendation for a single image. Every image
-# handed back to the model from a tool is clamped to this before returning,
-# regardless of what scale/region the model asked for -- relying on the
-# model to self-limit is exactly what caused the 400 this replaces.
-MAX_IMAGE_EDGE = 1568
+# Claude 4.7+ models (including the claude-sonnet-5 this agent uses) are in
+# Anthropic's "high-resolution" tier: max long edge 2576px, max 4784 visual
+# tokens -- not the 1568px "standard tier" value older code/docs assume.
+# 2576px is also the exact per-image ceiling Anthropic enforces once a
+# request carries multiple images (confirmed by the literal "2576 pixels" in
+# the many-image-request 400 this constant exists to prevent), so clamping
+# every image handed to the model to this edge stays safely under every
+# applicable limit while preserving as much detail as the model can use.
+# Relying on the model to self-limit is exactly what caused that 400.
+MAX_IMAGE_EDGE = 2576
 
 
 def _clamp_image_bytes(png_bytes: bytes, max_edge: int = MAX_IMAGE_EDGE) -> bytes:
@@ -67,6 +70,36 @@ def _clamp_image_bytes(png_bytes: bytes, max_edge: int = MAX_IMAGE_EDGE) -> byte
         buf = io.BytesIO()
         im.save(buf, format="PNG")
         return buf.getvalue()
+
+
+_PNG_MAGIC = b"\x89PNG\r\n\x1a\n"
+
+
+def clamp_request_images(callback_context, llm_request):
+    """ADK before_model_callback: downscale any oversized inline image in the outgoing request.
+
+    Every image these tools *return* (inspect_region, sanity_plot) already goes
+    through _clamp_image_bytes. But the very first source image the agent sees
+    is handed to it from outside this module -- by run_pipeline.py on the CLI,
+    or directly by ADK's own upload handling under `adk web` -- and neither of
+    those paths calls into tools.py, so that image can slip through unclamped.
+    A source image over Anthropic's per-image limit works fine alone, but once
+    a second image (e.g. from inspect_region) joins the request, the stricter
+    multi-image size cap applies and the request is rejected with a 400. This
+    callback is the one choke point every request passes through regardless of
+    entry point, so it catches that case no matter how the image got in.
+    """
+    for content in llm_request.contents or []:
+        for part in content.parts or []:
+            inline = getattr(part, "inline_data", None)
+            if not inline or not inline.data or not (inline.mime_type or "").startswith("image/"):
+                continue
+            clamped = _clamp_image_bytes(inline.data)
+            if clamped is not inline.data:
+                inline.data = clamped
+                if clamped[:8] == _PNG_MAGIC:
+                    inline.mime_type = "image/png"
+    return None
 
 
 def _to_int(value) -> int:

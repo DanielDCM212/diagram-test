@@ -2,6 +2,7 @@ from google.adk.agents import LlmAgent
 from google.adk.models.anthropic_llm import AnthropicLlm
 
 from .tools import (
+    clamp_request_images,
     find_bbox_of_color,
     get_image_size,
     inspect_region,
@@ -116,6 +117,7 @@ root_agent = LlmAgent(
     model=AnthropicLlm(model="claude-sonnet-5", max_tokens=16000),
     description="Recreates a diagram image as a validated draw.io (.drawio) file.",
     instruction=INSTRUCTION,
+    before_model_callback=clamp_request_images,
     tools=[
         get_image_size,
         inspect_region,
