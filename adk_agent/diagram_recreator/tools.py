@@ -409,6 +409,70 @@ def _rescale_diagram(diagram: Diagram) -> Optional[float]:
     return scale
 
 
+# draw.io has no auto-shrink-font-to-fit-box feature: with whiteSpace=wrap, a
+# label whose wrapped text is taller than its box just overflows past the
+# box edges into whatever's below, and a font picked without regard to box
+# size is just as likely to be needlessly tiny in a roomy box. Search for the
+# largest font size in this range whose wrapped text actually measures inside
+# the node's w/h before falling back to _MIN_FONT_SIZE -- Pillow's real text
+# metrics, not a guess, though still an approximation of draw.io's own
+# browser text rendering. Bounded above by 14 to match the range this
+# pipeline's diagrams already use in practice (schema.py DiagramNode default).
+_MIN_FONT_SIZE, _MAX_FONT_SIZE = 6, 14
+_LABEL_PADDING = 4.0  # px, rough match for draw.io's default internal label margin
+_LINE_HEIGHT_FACTOR = 1.2  # draw.io's approximate default line-height multiplier
+
+
+def _wrap_text_lines(label: str, font, max_width: float) -> list[str]:
+    words = label.split()
+    if not words:
+        return []
+    lines = []
+    current = words[0]
+    for word in words[1:]:
+        candidate = f"{current} {word}"
+        if font.getlength(candidate) <= max_width:
+            current = candidate
+        else:
+            lines.append(current)
+            current = word
+    lines.append(current)
+    return lines
+
+
+def _label_fits(label: str, font_size: int, w: float, h: float) -> bool:
+    from PIL import ImageFont
+
+    font = ImageFont.load_default(size=font_size)
+    max_width = max(1.0, w - 2 * _LABEL_PADDING)
+    lines = _wrap_text_lines(label, font, max_width)
+    if not lines:
+        return True
+    total_height = len(lines) * font_size * _LINE_HEIGHT_FACTOR
+    max_line_width = max(font.getlength(line) for line in lines)
+    return max_line_width <= max_width and total_height <= (h - 2 * _LABEL_PADDING)
+
+
+def _autofit_font_sizes(diagram: Diagram) -> None:
+    """Pick the largest font size that fits each node's label inside its box.
+
+    Skips nodes with no label or a raw_style (raw_style's own embedded
+    fontSize, if any, takes over and this pipeline doesn't rewrite it).
+    If even _MIN_FONT_SIZE doesn't fit, that node's label is too long for its
+    box -- left at _MIN_FONT_SIZE and accepted as a documented edge case
+    rather than growing the box (which risks colliding with neighbors).
+    """
+    for n in diagram.nodes:
+        if not n.label or n.raw_style:
+            continue
+        for size in range(_MAX_FONT_SIZE, _MIN_FONT_SIZE - 1, -1):
+            if _label_fits(n.label, size, n.w, n.h):
+                n.font_size = size
+                break
+        else:
+            n.font_size = _MIN_FONT_SIZE
+
+
 def save_diagram(diagram: Diagram, output_name: str) -> dict:
     """Validate and save the extracted diagram structure as JSON.
 
@@ -431,6 +495,7 @@ def save_diagram(diagram: Diagram, output_name: str) -> dict:
         diagram = Diagram.model_validate_json(diagram)
 
     applied_scale = _rescale_diagram(diagram)
+    _autofit_font_sizes(diagram)
 
     node_ids = {n.id for n in diagram.nodes}
     errors = []
