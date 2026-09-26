@@ -31,7 +31,6 @@ def _load_env():
 
 
 async def process_image(runner, image_path: Path, output_name: str) -> str:
-    from google.adk.sessions import InMemorySessionService  # noqa: F401 (type ref only)
     from google.genai import types
 
     user_id = "cli"
@@ -45,12 +44,7 @@ async def process_image(runner, image_path: Path, output_name: str) -> str:
         role="user",
         parts=[
             types.Part.from_bytes(data=image_bytes, mime_type=mime_type),
-            types.Part(
-                text=(
-                    f"Recreate this diagram as a draw.io file. "
-                    f"Use output_name=\"{output_name}\" for save_diagram / render_drawio / validate_drawio / sanity_plot."
-                )
-            ),
+            types.Part(text="Recreate this diagram as a draw.io file."),
         ],
     )
 
@@ -60,6 +54,22 @@ async def process_image(runner, image_path: Path, output_name: str) -> str:
     ):
         if event.is_final_response() and event.content and event.content.parts:
             final_text = "".join(p.text or "" for p in event.content.parts)
+
+    # The agent itself only saves the diagram/drawio XML into session state
+    # (see diagram_recreator/tools.py) -- persisting the finished artifact
+    # anywhere durable (a Postgres row, eventually) is a separate concern.
+    # This CLI harness pulls it back out here purely for local convenience,
+    # so `python -m adk_agent.run_pipeline` still produces a .drawio file to
+    # look at without needing a real persistence layer wired up.
+    result_session = await runner.session_service.get_session(
+        app_name=runner.app_name, user_id=user_id, session_id=session.id
+    )
+    drawio_xml = result_session.state.get("drawio_xml") if result_session else None
+    if drawio_xml:
+        out_dir = PROJECT_ROOT / "diagramsTestSonnetV2"
+        out_dir.mkdir(exist_ok=True)
+        (out_dir / f"{output_name}.drawio").write_text(drawio_xml, encoding="utf-8")
+
     return final_text
 
 

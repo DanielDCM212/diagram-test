@@ -27,7 +27,6 @@ not assumed.
 """
 import base64
 import io
-import json
 import re
 import sys
 import xml.etree.ElementTree as ET
@@ -37,8 +36,6 @@ from typing import Optional
 from google.adk.tools.tool_context import ToolContext
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-DIAGRAMS_DIR = PROJECT_ROOT / "diagramsTestSonnetV2"
-DIAGRAMS_DIR.mkdir(exist_ok=True)
 
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
@@ -79,6 +76,18 @@ _PNG_MAGIC = b"\x89PNG\r\n\x1a\n"
 
 _SOURCE_IMAGE_B64_KEY = "_source_image_b64"
 _SOURCE_IMAGE_MIME_KEY = "_source_image_mime"
+
+# Working artifacts are kept in ADK session state rather than written to a
+# local folder, so that whatever backs the session (SQLite by default under
+# `adk web`/`adk api_server`, Postgres once the session service is pointed
+# there) is the single place this data lives -- no separate local-disk save
+# step, and it survives a server restart for any session whose tool calls
+# already completed. A later persistence step (writing the finished diagram
+# to Postgres proper, alongside the `diagram_input` metadata a caller passes
+# via state_delta) reads these same keys off the session; it does not exist
+# yet and is intentionally out of scope here.
+_DIAGRAM_JSON_KEY = "diagram_json"
+_DRAWIO_XML_KEY = "drawio_xml"
 
 
 def clamp_request_images(callback_context, llm_request):
@@ -487,17 +496,16 @@ def _autofit_font_sizes(diagram: Diagram) -> None:
             n.font_size = _MIN_FONT_SIZE
 
 
-def save_diagram(diagram: Diagram, output_name: str) -> dict:
-    """Validate and save the extracted diagram structure as JSON.
+def save_diagram(tool_context: ToolContext, diagram: Diagram) -> dict:
+    """Validate the extracted diagram structure and save it into session state.
 
     Call this once you've identified every node and edge. It checks that
     every edge's source/target refers to a node id that actually exists
-    (beyond the basic schema validation ADK already applies) before writing
-    the file, so mistakes surface here rather than as a broken .drawio later.
+    (beyond the basic schema validation ADK already applies) before storing
+    it, so mistakes surface here rather than as a broken .drawio later.
 
     Args:
         diagram: The full extracted diagram (nodes + edges).
-        output_name: Base filename to save as, e.g. "img_7" -> diagrams/img_7.diagram.json.
     """
     # For a large/deeply-nested tool argument like this one, Claude occasionally
     # emits the whole structure as an escaped JSON string instead of a native
@@ -525,53 +533,44 @@ def save_diagram(diagram: Diagram, output_name: str) -> dict:
     if errors:
         return {"saved": False, "errors": errors}
 
-    out_path = DIAGRAMS_DIR / f"{output_name}.diagram.json"
-    out_path.write_text(json.dumps(diagram.model_dump(exclude_none=True), indent=2), encoding="utf-8")
-    result = {"saved": True, "path": str(out_path), "nodes": len(diagram.nodes), "edges": len(diagram.edges)}
+    tool_context.state[_DIAGRAM_JSON_KEY] = diagram.model_dump(exclude_none=True)
+    result = {"saved": True, "nodes": len(diagram.nodes), "edges": len(diagram.edges)}
     if applied_scale is not None:
         result["rescaled"] = round(applied_scale, 4)
     return result
 
 
-def render_drawio(output_name: str) -> dict:
-    """Render a previously saved diagram JSON into a .drawio (mxGraph XML) file.
+def render_drawio(tool_context: ToolContext) -> dict:
+    """Render the diagram JSON saved by save_diagram into mxGraph XML, stored in session state.
 
     This step is plain deterministic code, not a model guess — it cannot by
     itself introduce a dangling reference or malformed XML as long as the
     JSON passed schema validation in save_diagram.
-
-    Args:
-        output_name: Base filename used in save_diagram, e.g. "img_7".
     """
-    json_path = DIAGRAMS_DIR / f"{output_name}.diagram.json"
-    if not json_path.exists():
-        return {"error": f"{json_path} does not exist — call save_diagram first"}
-    diagram = json.loads(json_path.read_text(encoding="utf-8"))
+    diagram = tool_context.state.get(_DIAGRAM_JSON_KEY)
+    if diagram is None:
+        return {"error": "no saved diagram in session state — call save_diagram first"}
     xml_str = render_mxgraph_xml(diagram)
-    out_path = DIAGRAMS_DIR / f"{output_name}.drawio"
-    out_path.write_text(xml_str, encoding="utf-8")
-    return {"path": str(out_path), "nodes": len(diagram["nodes"]), "edges": len(diagram["edges"])}
+    tool_context.state[_DRAWIO_XML_KEY] = xml_str
+    return {"nodes": len(diagram["nodes"]), "edges": len(diagram["edges"])}
 
 
-def validate_drawio(output_name: str) -> dict:
-    """Parse the rendered .drawio XML and confirm every edge's source/target id resolves to a real node.
+def validate_drawio(tool_context: ToolContext) -> dict:
+    """Parse the rendered drawio XML and confirm every edge's source/target id resolves to a real node.
 
     Always call this after render_drawio. If it reports dangling ids or a
-    parse error, fix diagrams/<output_name>.diagram.json and call
-    save_diagram/render_drawio again — don't hand-patch the XML.
-
-    Args:
-        output_name: Base filename used in render_drawio, e.g. "img_7".
+    parse error, fix the diagram and call save_diagram/render_drawio again —
+    don't hand-patch the XML.
     """
-    path = DIAGRAMS_DIR / f"{output_name}.drawio"
-    if not path.exists():
-        return {"error": f"{path} does not exist — call render_drawio first"}
+    xml_str = tool_context.state.get(_DRAWIO_XML_KEY)
+    if xml_str is None:
+        return {"error": "no rendered drawio XML in session state — call render_drawio first"}
     try:
-        tree = ET.parse(path)
+        root = ET.fromstring(xml_str)
     except ET.ParseError as e:
         return {"valid": False, "parse_error": str(e)}
 
-    cells = tree.getroot().findall(".//mxCell")
+    cells = root.findall(".//mxCell")
     ids = {c.get("id") for c in cells}
     dangling = []
     for c in cells:
@@ -582,7 +581,7 @@ def validate_drawio(output_name: str) -> dict:
     return {"valid": not dangling, "cell_count": len(cells), "dangling": dangling}
 
 
-def sanity_plot(output_name: str) -> dict:
+def sanity_plot(tool_context: ToolContext) -> dict:
     """Render a rough, schematic PNG preview of the saved diagram JSON, returned to you for a real visual check.
 
     This is a quick matplotlib plot of node/edge positions — colors and
@@ -595,14 +594,10 @@ def sanity_plot(output_name: str) -> dict:
     disconnected circles instead of overlapping ones), fix the diagram and
     call save_diagram -> render_drawio -> validate_drawio -> sanity_plot
     again rather than accepting a mismatch.
-
-    Args:
-        output_name: Base filename used in save_diagram, e.g. "img_7".
     """
-    json_path = DIAGRAMS_DIR / f"{output_name}.diagram.json"
-    if not json_path.exists():
-        return {"error": f"{json_path} does not exist — call save_diagram first"}
-    diagram = json.loads(json_path.read_text(encoding="utf-8"))
+    diagram = tool_context.state.get(_DIAGRAM_JSON_KEY)
+    if diagram is None:
+        return {"error": "no saved diagram in session state — call save_diagram first"}
 
     import matplotlib
 
@@ -647,8 +642,6 @@ def sanity_plot(output_name: str) -> dict:
     ax.set_ylim(max_y + 10, -10)
     ax.axis("off")
     plt.tight_layout()
-    out_path = DIAGRAMS_DIR / f"{output_name}.sanity.png"
-    plt.savefig(out_path, dpi=150)
     buf = io.BytesIO()
     plt.savefig(buf, format="png", dpi=150)
     plt.close(fig)
@@ -656,7 +649,6 @@ def sanity_plot(output_name: str) -> dict:
     from google.genai import types
 
     return {
-        "path": str(out_path),
         "node_count": len(diagram["nodes"]),
         "edge_count": len(diagram["edges"]),
         "image": types.Part.from_bytes(data=_clamp_image_bytes(buf.getvalue()), mime_type="image/png"),

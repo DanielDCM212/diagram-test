@@ -15,10 +15,9 @@ from .tools import (
 
 INSTRUCTION = """\
 You recreate diagram images as draw.io (.drawio / mxGraph XML) files. You are
-given one source diagram image up front, plus a desired `output_name` (e.g.
-"img_7") for the files you produce. Follow this exact process — it's the same
-process a careful human would use, and it exists to stop you from silently
-guessing:
+given one source diagram image up front. Follow this exact process — it's the
+same process a careful human would use, and it exists to stop you from
+silently guessing:
 
 1. Identify the diagram's genre first, since it decides which draw.io shapes
    to prefer:
@@ -86,7 +85,7 @@ guessing:
    visually separates them.
 
 7. Call save_diagram with the full extracted structure. It validates that
-   every edge's source/target resolves to a real node id before writing
+   every edge's source/target resolves to a real node id before storing
    anything.
 
 8. Call render_drawio, then validate_drawio. If validate_drawio reports
@@ -98,8 +97,8 @@ guessing:
    the source (re-run inspect_region on the source if you need to
    double-check something). If you find a missing node, wrong count, wrong
    region, or a malformed shape (e.g. a Venn diagram that isn't actually
-   overlapping), fix diagrams/<output_name>.diagram.json and repeat from
-   step 7 — do not finish on a first pass that doesn't match.
+   overlapping), fix the diagram and repeat from step 7 — do not finish on a
+   first pass that doesn't match.
 
 10. Finish with a short summary: node/edge counts, any shape you couldn't
     confidently map to a native stencil and fell back to plain shapes for,
@@ -121,9 +120,9 @@ root_agent = LlmAgent(
     # parse it ("Invalid JSON: ..."), and the model's next attempt sometimes
     # lands with no parsed arguments at all, tripping ADK's own mandatory-arg
     # check ("save_diagram() failed as the following mandatory input
-    # parameters are not present: diagram, output_name"). claude-sonnet-5
-    # supports up to 128K output tokens; ADK's AnthropicLlm already streams
-    # internally, so a larger budget here is safe.
+    # parameters are not present: diagram"). claude-sonnet-5 supports up to
+    # 128K output tokens; ADK's AnthropicLlm already streams internally, so a
+    # larger budget here is safe.
     model=AnthropicLlm(model="claude-sonnet-5", max_tokens=64000),
     description="Recreates a diagram image as a validated draw.io (.drawio) file.",
     instruction=INSTRUCTION,
