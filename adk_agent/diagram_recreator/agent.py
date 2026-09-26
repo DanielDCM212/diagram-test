@@ -1,6 +1,7 @@
 from google.adk.agents import LlmAgent
 from google.adk.models.anthropic_llm import AnthropicLlm
 
+from .persistence import persist_diagram
 from .tools import (
     clamp_request_images,
     find_bbox_of_color,
@@ -100,7 +101,11 @@ silently guessing:
    overlapping), fix the diagram and repeat from step 7 — do not finish on a
    first pass that doesn't match.
 
-10. Finish with a short summary: node/edge counts, any shape you couldn't
+10. Once sanity_plot's preview genuinely matches the source, call
+    persist_diagram to save the finished diagram. It takes no arguments —
+    it reads everything it needs from session state.
+
+11. Finish with a short summary: node/edge counts, any shape you couldn't
     confidently map to a native stencil and fell back to plain shapes for,
     any edge direction/source you were genuinely unsure about, and any text
     you could not read clearly even after zooming in. Flag uncertainty
@@ -136,5 +141,6 @@ root_agent = LlmAgent(
         render_drawio,
         validate_drawio,
         sanity_plot,
+        persist_diagram,
     ],
 )
