@@ -25,19 +25,22 @@ def _dispatch(tables: dict[str, Any], sql: str, params: Any) -> Optional[tuple]:
 
     if "SELECT status FROM iag_diagrams" in text:
         (diagram_id,) = params
-        row = tables["iag_diagrams"].get(diagram_id)
-        return (row["status"],) if row else None
+        rows = [r for r in tables["iag_diagrams"] if r["id"] == diagram_id]
+        if not rows:
+            return None
+        latest = max(rows, key=lambda r: r["version"])
+        return (latest["status"],)
 
     if "FROM iag_diagram_versions" in text and "MAX(version)" in text:
         (diagram_id,) = params
         existing = [v["version"] for v in tables["iag_diagram_versions"] if v["diagram_id"] == diagram_id]
         return (max(existing, default=0) + 1,)
 
-    if "INSERT INTO iag_diagrams" in text and "ON CONFLICT" in text:
-        diagram_id = params["id"]
-        inserted = diagram_id not in tables["iag_diagrams"]
-        tables["iag_diagrams"][diagram_id] = {**params, "status": "DRAFT"}
-        return (inserted,)
+    if "INSERT INTO iag_diagrams" in text:
+        # One row per version -- current_version doubles as this row's own
+        # version number (see persistence.py's module docstring).
+        tables["iag_diagrams"].append({**params, "status": "DRAFT", "version": params["version"]})
+        return None
 
     if "INSERT INTO iag_diagram_versions" in text:
         diagram_id, version, xml, calm_json, geometry_json, description, change_summary, custom_metadata, created_by = params
@@ -121,7 +124,7 @@ class _MockConnection:
 class _MockPool:
     def __init__(self) -> None:
         self.tables: dict[str, Any] = {
-            "iag_diagrams": {},
+            "iag_diagrams": [],
             "iag_diagram_versions": [],
             "iag_diagram_approval_events": [],
             "iag_diagram_permissions": [],

@@ -12,8 +12,15 @@ version/history/approval-event flow, is genuine and runs unchanged once
 Domain rows (iag_domains) are assumed to already exist -- unlike the
 reference, we deliberately do not upsert them here.
 
+`iag_diagrams` holds one row PER VERSION (confirmed against the real
+schema -- `id` is not unique there), not a single current-state row per
+diagram. So every persist is a plain append, never an update-in-place,
+and none of this relies on a unique/exclusion constraint existing on
+`id`. `current_version` on that row doubles as this row's own version
+number.
+
 One transaction, in this order:
-    1. iag_diagrams               UPSERT by id, bumps current_version
+    1. iag_diagrams               INSERT, one new row per version
     2. iag_diagram_versions       append-only per (diagram_id, version)
     3. iag_diagram_approval_events one row per persist (audit trail)
     4. iag_diagram_permissions    OWNER row, first create only
@@ -98,8 +105,16 @@ def _error(reason: str, detail: str) -> dict[str, Any]:
     return PersistResult(status="error", reason=reason, detail=detail).model_dump(exclude_none=True)
 
 
+# No ORDER BY column other than current_version distinguishes rows for the
+# same id (there's one row per version) -- take the highest version's status
+# as "previous". FOR UPDATE only locks that one row; it doesn't serialize
+# concurrent inserts of a brand-new diagram_id (nothing to lock yet).
 _SQL_LOOKUP_PREVIOUS_STATUS = """
-SELECT status FROM iag_diagrams WHERE id = %s FOR UPDATE
+SELECT status FROM iag_diagrams
+WHERE id = %s
+ORDER BY current_version DESC
+LIMIT 1
+FOR UPDATE
 """
 
 _SQL_NEXT_VERSION = """
@@ -108,11 +123,11 @@ FROM iag_diagram_versions
 WHERE diagram_id = %s
 """
 
-# `RETURNING (xmax = 0)` is the standard Postgres idiom for telling whether an
-# INSERT ... ON CONFLICT DO UPDATE actually inserted or updated a row, in the
-# same statement/round-trip -- xmax is only set on the tuple written by the
-# UPDATE branch.
-_SQL_DIAGRAM_UPSERT = """
+# Plain INSERT, one new row per version -- no ON CONFLICT, so this doesn't
+# depend on `id` (or any other column here) having a unique/exclusion
+# constraint. `inserted` (first version vs. a later one) is decided by the
+# previous-status lookup above, before this ever runs.
+_SQL_DIAGRAM_INSERT = """
 INSERT INTO iag_diagrams (
     id, title, description, format, diagram_type, xml,
     calm_json, geometry_json,
@@ -130,27 +145,6 @@ VALUES (
     setweight(to_tsvector('english', coalesce(%(description)s, '')), 'B'),
     %(embedding)s
 )
-ON CONFLICT (id) DO UPDATE SET
-    title              = EXCLUDED.title,
-    description        = EXCLUDED.description,
-    format             = EXCLUDED.format,
-    diagram_type       = EXCLUDED.diagram_type,
-    xml                = EXCLUDED.xml,
-    calm_json          = COALESCE(EXCLUDED.calm_json, iag_diagrams.calm_json),
-    geometry_json      = COALESCE(EXCLUDED.geometry_json, iag_diagrams.geometry_json),
-    tags               = EXCLUDED.tags,
-    status             = 'DRAFT',
-    current_version    = EXCLUDED.current_version,
-    updated_by         = EXCLUDED.updated_by,
-    updated_at         = now(),
-    source_type        = EXCLUDED.source_type,
-    source_ref         = EXCLUDED.source_ref,
-    source_url         = EXCLUDED.source_url,
-    custom_metadata    = EXCLUDED.custom_metadata,
-    tsv                = setweight(to_tsvector('english', coalesce(EXCLUDED.title, '')), 'A') ||
-                        setweight(to_tsvector('english', coalesce(EXCLUDED.description, '')), 'B'),
-    embedding          = EXCLUDED.embedding
-RETURNING (xmax = 0) AS inserted
 """
 
 _SQL_VERSION_INSERT = """
@@ -244,9 +238,11 @@ def persist_diagram(tool_context: ToolContext) -> dict[str, Any]:
                 next_version = cur.fetchone()[0]
                 params["version"] = next_version
 
-                # 2. Diagram upsert (current-state row).
-                cur.execute(_SQL_DIAGRAM_UPSERT, params)
-                inserted = bool(cur.fetchone()[0])
+                # 2. Diagram row for this version -- always a fresh insert.
+                #    `inserted` (first version vs. a later one) was already
+                #    decided by whether step 1 found a prior row.
+                inserted = previous_status is None
+                cur.execute(_SQL_DIAGRAM_INSERT, params)
 
                 # 3. Version history (append-only).
                 cur.execute(
