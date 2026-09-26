@@ -25,13 +25,37 @@ import uuid
 from typing import Any, Optional
 
 from google.adk.tools.tool_context import ToolContext
+from google.genai import types
 from pydantic import BaseModel, Field
 
-from .postgres_connection import PostgresConnection
+from .postgres_connection import PostgresConnection, check_connection
 from .tools import _DIAGRAM_JSON_KEY, _DRAWIO_XML_KEY  # noqa: F401 (diagram_json reserved for future use)
 
 _STATE_DIAGRAM_INPUT_KEY = "diagram_input"
 _STATE_PERSIST_RESULT_KEY = "persist_result"
+
+
+def check_db_before_run(callback_context):
+    """before_agent_callback: verify the persistence layer is reachable before recreating anything.
+
+    Runs once, before the vision/tool-calling loop starts. Recreating a
+    diagram is expensive (several LLM turns, tool calls); there is no point
+    running all of that only to fail at the very last step (persist_diagram)
+    because the database was never reachable. Returning non-None Content
+    here skips the agent run entirely and sends that content back as the
+    response instead (see BaseAgent.before_agent_callback in the installed
+    google-adk package).
+    """
+    available, error = check_connection()
+    if available:
+        return None
+    return types.Content(
+        role="model",
+        parts=[types.Part(text=(
+            "Cannot start: the diagram persistence database is not reachable "
+            f"({error}). No diagram recreation was attempted."
+        ))],
+    )
 
 
 class DiagramInput(BaseModel):

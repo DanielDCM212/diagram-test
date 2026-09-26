@@ -19,6 +19,10 @@ from typing import Any, Optional
 def _dispatch(tables: dict[str, Any], sql: str, params: Any) -> Optional[tuple]:
     text = " ".join(sql.split())
 
+    if text == "SELECT 1":
+        # Trivial connectivity probe used by check_connection() below.
+        return (1,)
+
     if "SELECT status FROM iag_diagrams" in text:
         (diagram_id,) = params
         row = tables["iag_diagrams"].get(diagram_id)
@@ -140,3 +144,26 @@ class PostgresConnection:
         if _pool is None:
             _pool = _MockPool()
         return _pool
+
+
+def check_connection() -> tuple[bool, Optional[str]]:
+    """Probe whether the persistence layer is reachable.
+
+    Runs the same pool -> connection -> cursor -> execute round trip
+    persist_diagram uses, with a trivial `SELECT 1`. Against this mock that
+    round trip can't actually fail, but once `PostgresConnection` is swapped
+    for the real client this becomes a genuine connectivity check with no
+    other code changes needed.
+
+    Returns:
+        (True, None) if reachable, otherwise (False, <error message>).
+    """
+    try:
+        pool = PostgresConnection.get_pool()
+        with pool.connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT 1")
+                cur.fetchone()
+        return True, None
+    except Exception as exc:
+        return False, str(exc)

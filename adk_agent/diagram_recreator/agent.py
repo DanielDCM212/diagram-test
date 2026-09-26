@@ -1,7 +1,7 @@
 from google.adk.agents import LlmAgent
 from google.adk.models.anthropic_llm import AnthropicLlm
 
-from .persistence import persist_diagram
+from .persistence import check_db_before_run, persist_diagram
 from .tools import (
     clamp_request_images,
     find_bbox_of_color,
@@ -131,6 +131,7 @@ root_agent = LlmAgent(
     model=AnthropicLlm(model="claude-sonnet-5", max_tokens=64000),
     description="Recreates a diagram image as a validated draw.io (.drawio) file.",
     instruction=INSTRUCTION,
+    before_agent_callback=check_db_before_run,
     before_model_callback=clamp_request_images,
     tools=[
         get_image_size,
