@@ -25,6 +25,7 @@ the next turn. This is what makes a real zoom-and-reread loop possible here,
 not just a numeric measurement — confirmed against the installed ADK source,
 not assumed.
 """
+import base64
 import io
 import json
 import re
@@ -33,8 +34,9 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Optional
 
+from google.adk.tools.tool_context import ToolContext
+
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-IMAGES_DIR = PROJECT_ROOT / "images"
 DIAGRAMS_DIR = PROJECT_ROOT / "diagramsTestSonnetV2"
 DIAGRAMS_DIR.mkdir(exist_ok=True)
 
@@ -75,32 +77,63 @@ def _clamp_image_bytes(png_bytes: bytes, max_edge: int = MAX_IMAGE_EDGE) -> byte
 
 _PNG_MAGIC = b"\x89PNG\r\n\x1a\n"
 
+_SOURCE_IMAGE_B64_KEY = "_source_image_b64"
+_SOURCE_IMAGE_MIME_KEY = "_source_image_mime"
+
 
 def clamp_request_images(callback_context, llm_request):
-    """ADK before_model_callback: downscale any oversized inline image in the outgoing request.
+    """ADK before_model_callback: capture the session's source image, downscale oversized inline images.
 
-    Every image these tools *return* (inspect_region, sanity_plot) already goes
-    through _clamp_image_bytes. But the very first source image the agent sees
-    is handed to it from outside this module -- by run_pipeline.py on the CLI,
-    or directly by ADK's own upload handling under `adk web` -- and neither of
-    those paths calls into tools.py, so that image can slip through unclamped.
-    A source image over Anthropic's per-image limit works fine alone, but once
-    a second image (e.g. from inspect_region) joins the request, the stricter
-    multi-image size cap applies and the request is rejected with a 400. This
-    callback is the one choke point every request passes through regardless of
-    entry point, so it catches that case no matter how the image got in.
+    Two jobs, both needing the one choke point every request passes through
+    regardless of entry point (CLI attachment via run_pipeline.py, or a real
+    upload under `adk web`):
+
+    1. Capture the source image. The pixel-measurement tools (get_image_size,
+       inspect_region, sample_color_at, find_bbox_of_color) used to read the
+       image from a local images/ folder by filename -- which only worked if
+       whatever the user actually attached in the conversation happened to
+       already exist on disk under a matching name. They now read from
+       session state instead, populated here from the first inline image
+       seen in the whole conversation (which is always the original
+       attachment, since any later inline image only shows up from a tool
+       result on a subsequent turn). Captured once, before any clamping
+       below, so the copy tools measure against stays at full native
+       resolution regardless of what gets downscaled for the API request.
+       Stored as base64 text (not raw bytes) since session state can be
+       JSON-persisted (e.g. `adk web`'s SQLite-backed session store), which
+       raw bytes aren't serializable for.
+    2. Downscale any oversized inline image actually going to the model.
+       Every image these tools *return* (inspect_region, sanity_plot) already
+       goes through _clamp_image_bytes, but the source image itself is handed
+       in from outside this module, so it can slip through unclamped. A
+       source image over Anthropic's per-image limit works fine alone, but
+       once a second image (e.g. from inspect_region) joins the request, the
+       stricter multi-image size cap applies and the request is rejected with
+       a 400.
     """
+    captured = _SOURCE_IMAGE_B64_KEY in callback_context.state
     for content in llm_request.contents or []:
         for part in content.parts or []:
             inline = getattr(part, "inline_data", None)
             if not inline or not inline.data or not (inline.mime_type or "").startswith("image/"):
                 continue
+            if not captured:
+                callback_context.state[_SOURCE_IMAGE_B64_KEY] = base64.b64encode(inline.data).decode("ascii")
+                callback_context.state[_SOURCE_IMAGE_MIME_KEY] = inline.mime_type
+                captured = True
             clamped = _clamp_image_bytes(inline.data)
             if clamped is not inline.data:
                 inline.data = clamped
                 if clamped[:8] == _PNG_MAGIC:
                     inline.mime_type = "image/png"
     return None
+
+
+def _get_source_image_bytes(tool_context: ToolContext) -> Optional[bytes]:
+    b64 = tool_context.state.get(_SOURCE_IMAGE_B64_KEY)
+    if not b64:
+        return None
+    return base64.b64decode(b64)
 
 
 def _to_int(value) -> int:
@@ -125,34 +158,18 @@ def _to_float(value) -> float:
     return float(value)
 
 
-def _resolve_image(image_path: str) -> Path:
-    p = Path(image_path)
-    if not p.is_absolute():
-        candidate = PROJECT_ROOT / image_path
-        if candidate.exists():
-            return candidate
-        candidate = IMAGES_DIR / Path(image_path).name
-        if candidate.exists():
-            return candidate
-    return p
-
-
-def get_image_size(image_path: str) -> dict:
-    """Return the pixel width/height of a source image.
-
-    Args:
-        image_path: Path to the image, relative to the project root or just the filename in images/.
-    """
+def get_image_size(tool_context: ToolContext) -> dict:
+    """Return the pixel width/height of the diagram image attached to this session."""
     from PIL import Image
 
-    path = _resolve_image(image_path)
-    if not path.exists():
-        return {"error": f"image not found: {image_path}"}
-    with Image.open(path) as im:
+    data = _get_source_image_bytes(tool_context)
+    if data is None:
+        return {"error": "no source image found for this session -- attach the diagram image in your first message"}
+    with Image.open(io.BytesIO(data)) as im:
         return {"width": im.width, "height": im.height}
 
 
-def inspect_region(image_path: str, x: int, y: int, w: int, h: int, scale: float = 4) -> dict:
+def inspect_region(tool_context: ToolContext, x: int, y: int, w: int, h: int, scale: float = 4) -> dict:
     """Crop a region of the source image and zoom in, so you can actually read small/dense detail.
 
     Use this whenever a region has small text, a table, a legend with many
@@ -168,7 +185,6 @@ def inspect_region(image_path: str, x: int, y: int, w: int, h: int, scale: float
     than a smaller scale if a crop comes back less sharp than expected).
 
     Args:
-        image_path: Path to the image, relative to the project root or just the filename in images/.
         x: Left edge of the region, in source-image pixels.
         y: Top edge of the region, in source-image pixels.
         w: Width of the region, in source-image pixels.
@@ -183,10 +199,10 @@ def inspect_region(image_path: str, x: int, y: int, w: int, h: int, scale: float
     x, y, w, h = _to_int(x), _to_int(y), _to_int(w), _to_int(h)
     scale = _to_float(scale)
 
-    path = _resolve_image(image_path)
-    if not path.exists():
-        return {"error": f"image not found: {image_path}"}
-    with Image.open(path) as im:
+    data = _get_source_image_bytes(tool_context)
+    if data is None:
+        return {"error": "no source image found for this session -- attach the diagram image in your first message"}
+    with Image.open(io.BytesIO(data)) as im:
         im = im.convert("RGB")
         x0, y0 = max(0, x), max(0, y)
         x1, y1 = min(im.width, x + w), min(im.height, y + h)
@@ -216,14 +232,13 @@ def inspect_region(image_path: str, x: int, y: int, w: int, h: int, scale: float
     }
 
 
-def sample_color_at(image_path: str, x: int, y: int) -> dict:
+def sample_color_at(tool_context: ToolContext, x: int, y: int) -> dict:
     """Sample the exact pixel color at (x, y) in the source image.
 
     Use this instead of guessing a fill/stroke color by eye — pick a point
     well inside the shape you're measuring, away from its border/text.
 
     Args:
-        image_path: Path to the image, relative to the project root or just the filename in images/.
         x: Pixel x-coordinate.
         y: Pixel y-coordinate.
     """
@@ -231,10 +246,10 @@ def sample_color_at(image_path: str, x: int, y: int) -> dict:
 
     x, y = _to_int(x), _to_int(y)
 
-    path = _resolve_image(image_path)
-    if not path.exists():
-        return {"error": f"image not found: {image_path}"}
-    with Image.open(path) as im:
+    data = _get_source_image_bytes(tool_context)
+    if data is None:
+        return {"error": "no source image found for this session -- attach the diagram image in your first message"}
+    with Image.open(io.BytesIO(data)) as im:
         im = im.convert("RGB")
         if not (0 <= x < im.width and 0 <= y < im.height):
             return {"error": f"({x},{y}) is outside the image ({im.width}x{im.height})"}
@@ -243,7 +258,7 @@ def sample_color_at(image_path: str, x: int, y: int) -> dict:
 
 
 def find_bbox_of_color(
-    image_path: str,
+    tool_context: ToolContext,
     hex_color: str,
     x: Optional[int] = None,
     y: Optional[int] = None,
@@ -262,7 +277,6 @@ def find_bbox_of_color(
     and retry.
 
     Args:
-        image_path: Path to the image, relative to the project root or just the filename in images/.
         hex_color: Color to search for, e.g. "#248D45".
         x: Left edge of the region to restrict the search to, in source-image pixels. Omit to search the whole image.
         y: Top edge of the region, in source-image pixels.
@@ -275,10 +289,10 @@ def find_bbox_of_color(
     tolerance = _to_int(tolerance)
     has_region = None not in (x, y, w, h)
 
-    path = _resolve_image(image_path)
-    if not path.exists():
-        return {"error": f"image not found: {image_path}"}
-    with Image.open(path) as im:
+    data = _get_source_image_bytes(tool_context)
+    if data is None:
+        return {"error": "no source image found for this session -- attach the diagram image in your first message"}
+    with Image.open(io.BytesIO(data)) as im:
         im = im.convert("RGB")
         if has_region:
             x0, y0 = max(0, _to_int(x)), max(0, _to_int(y))
