@@ -277,7 +277,7 @@ def persist_diagram(tool_context: ToolContext) -> dict[str, Any]:
                     cur.execute(
                         _SQL_PERM_INSERT,
                         (
-                            f"diagram_perm_{uuid.uuid4().hex}",
+                            f"diagperm_{uuid.uuid4().hex}",
                             diagram_input.soeid,
                             diagram_id,
                             diagram_input.soeid,
