@@ -51,7 +51,7 @@ def _store_input(callback_context, raw: str) -> Optional[dd.Doc]:
     if callback_context.state.get(_INPUT_HASH_KEY) != sha:
         callback_context.state[_INPUT_HASH_KEY] = sha
         callback_context.state[DRAWIO_XML_KEY] = dd.serialize(doc)
-        callback_context.state.pop("input_xml_error", None)
+        callback_context.state["input_xml_error"] = ""  # ADK State has no pop/del; "" means no error
     return doc
 
 

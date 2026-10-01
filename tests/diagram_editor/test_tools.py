@@ -1,6 +1,7 @@
 from types import SimpleNamespace
 
 import pytest
+from google.adk.sessions.state import State
 from google.genai import types
 
 from adk_agent.diagram_editor import drawio_doc as dd
@@ -11,8 +12,11 @@ from tests.diagram_editor.test_layout import _reference_xml, _spec, refdir  # no
 
 
 class Ctx(SimpleNamespace):
+    """Stand-in for ToolContext/CallbackContext. Uses ADK's real State (not a dict): it has no
+    pop()/del/items(), and a dict here once let a State.pop() call through to production."""
+
     def __init__(self):
-        super().__init__(state={})
+        super().__init__(state=State({}, {}))
 
 
 @pytest.fixture(autouse=True)
@@ -57,11 +61,20 @@ def test_capture_bad_xml_sets_error_not_state():
     assert "could not be parsed" in tools.describe_diagram(ctx)["error"]
 
 
+def test_bad_xml_error_is_cleared_by_a_later_good_xml():
+    ctx = Ctx()
+    tools.capture_input_xml(ctx, _request(types.Part(text="<mxfile><diagram name='x'>@@@</diagram></mxfile>")))
+    assert ctx.state["input_xml_error"] and "drawio_xml" not in ctx.state
+    tools.capture_input_xml(ctx, _request(types.Part(text=f"fixed it:\n{PLAIN}")))  # real State: no pop() available
+    assert not ctx.state["input_xml_error"] and "drawio_xml" in ctx.state
+    assert tools.describe_diagram(ctx)["vertices"]
+
+
 def test_capture_ignores_model_turns_and_plain_text():
     ctx = Ctx()
     tools.capture_input_xml(ctx, _request(types.Part(text=PLAIN), role="model"))
     tools.capture_input_xml(ctx, _request(types.Part(text="make a diagram of an order system")))
-    assert ctx.state == {}
+    assert ctx.state.to_dict() == {}
 
 
 def test_edit_diagram_tool_with_dict_ops_and_atomic_failure():
