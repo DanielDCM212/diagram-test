@@ -15,6 +15,7 @@ from typing import Any, Optional
 from google.adk.tools.tool_context import ToolContext
 from pydantic import TypeAdapter, ValidationError
 
+from . import diff
 from . import drawio_doc as dd
 from . import export_client
 from . import overlaps as ov
@@ -25,6 +26,8 @@ from .schema import ArchitectureSpec, EditOp
 
 DRAWIO_XML_KEY = "drawio_xml"  # working + final diagram
 _INPUT_HASH_KEY = "_input_xml_sha"
+_BASELINE_KEY = "baseline_xml"            # the diagram as the user supplied it ("" = started from nothing)
+CHANGE_SUMMARY_KEY = "change_summary"     # computed by code from baseline vs working diagram; read by callers
 
 _XML_SPAN_RE = re.compile(r"<mxfile\b.*?</mxfile>|<mxGraphModel\b.*?</mxGraphModel>", re.DOTALL)
 _XML_MIMES = ("text/xml", "application/xml", "text/plain", "application/octet-stream",
@@ -51,6 +54,8 @@ def _store_input(callback_context, raw: str) -> Optional[dd.Doc]:
     if callback_context.state.get(_INPUT_HASH_KEY) != sha:
         callback_context.state[_INPUT_HASH_KEY] = sha
         callback_context.state[DRAWIO_XML_KEY] = dd.serialize(doc)
+        callback_context.state[_BASELINE_KEY] = dd.serialize(doc)
+        callback_context.state[CHANGE_SUMMARY_KEY] = _stored(diff.diff_docs(doc, doc))
         callback_context.state["input_xml_error"] = ""  # ADK State has no pop/del; "" means no error
     return doc
 
@@ -102,8 +107,26 @@ def _working_doc(tool_context: ToolContext) -> tuple[Optional[dd.Doc], Optional[
     return dd.load(xml), None
 
 
-def _save(tool_context: ToolContext, doc: dd.Doc) -> None:
-    tool_context.state[DRAWIO_XML_KEY] = dd.serialize(doc)
+def _stored(result: dict) -> dict:
+    """The part of a diff worth keeping in session state: no per-cell details."""
+    return {k: result[k] for k in ("since", "summary", "counts", "lines", "truncated")}
+
+
+def _commit(tool_context: ToolContext, doc: dd.Doc) -> dict:
+    """Save `doc` as the working diagram and record what changed.
+
+    Updates state["change_summary"] (baseline -> now, for the whole session) and returns this one
+    call's own changes in compact form. All numbers come from diff.py, never from the model.
+    """
+    state = tool_context.state
+    before_xml = state.get(DRAWIO_XML_KEY)
+    before = dd.load(before_xml) if before_xml else None
+    if _BASELINE_KEY not in state:  # create mode, or state set from outside: baseline = what existed
+        state[_BASELINE_KEY] = before_xml or ""
+    state[DRAWIO_XML_KEY] = dd.serialize(doc)
+    base_xml = state.get(_BASELINE_KEY)
+    state[CHANGE_SUMMARY_KEY] = _stored(diff.diff_docs(dd.load(base_xml) if base_xml else None, doc))
+    return diff.compact(diff.diff_docs(before, doc))
 
 
 def _coerce(model_or_raw: Any, adapter: TypeAdapter):
@@ -165,8 +188,8 @@ def create_diagram(tool_context: ToolContext, spec: ArchitectureSpec) -> dict:
         doc, stats = build_diagram(spec)
     except LayoutError as exc:
         return {"created": False, "errors": exc.problems}
-    _save(tool_context, doc)
-    return {"created": True, **stats}
+    changes = _commit(tool_context, doc)
+    return {"created": True, **stats, "changes": changes}
 
 
 def describe_diagram(tool_context: ToolContext, page: int = 0) -> dict:
@@ -262,8 +285,8 @@ def edit_diagram(tool_context: ToolContext, ops: list[EditOp]) -> dict:
     check = dd.validate(new)
     if not check["valid"]:
         return {"applied": False, "results": results, "validation": check}
-    _save(tool_context, new)
-    return {"applied": True, "results": results, "cell_count": check["cell_count"]}
+    changes = _commit(tool_context, new)
+    return {"applied": True, "results": results, "cell_count": check["cell_count"], "changes": changes}
 
 
 def find_overlaps(tool_context: ToolContext, page: int = 0) -> dict:
@@ -352,8 +375,34 @@ def resolve_overlaps(
         return {"saved": False, "validation": check, **report}
     if dry_run:
         return {"saved": False, "dry_run": True, **report}
-    _save(tool_context, new)
-    return {"saved": True, **report}
+    changes = _commit(tool_context, new)
+    return {"saved": True, **report, "changes": changes}
+
+
+def get_change_summary(tool_context: ToolContext, detail: bool = False) -> dict:
+    """Return the verified summary of everything changed in this session, computed by code.
+
+    Compares the diagram as the user supplied it (or an empty diagram, in create mode) with the
+    current one, by cell id: added, removed, renamed, moved (separate from "carried along with a
+    moved container"), resized, restyled, reparented, reconnected, property and draw-order changes.
+    Call it before your final answer and quote `summary` (and the `lines` that matter) verbatim.
+    Never state counts of your own: yours can be wrong, these cannot.
+
+    Args:
+        detail: Also return per-cell details (capped).
+    """
+    state = tool_context.state
+    xml = state.get(DRAWIO_XML_KEY)
+    if not xml:
+        return {"error": "no working diagram"}
+    if _BASELINE_KEY not in state:
+        return {"summary": "No baseline recorded, so what changed can't be determined.", "since": "unknown"}
+    base_xml = state.get(_BASELINE_KEY)
+    res = diff.diff_docs(dd.load(base_xml) if base_xml else None, dd.load(xml))
+    out = _stored(res)
+    if detail:
+        out["details"] = res["details"]
+    return out
 
 
 def validate_drawio(tool_context: ToolContext) -> dict:

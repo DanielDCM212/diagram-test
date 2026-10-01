@@ -59,6 +59,11 @@ async def run(request: str, xml_path: Path | None, name: str) -> str:
         app_name=runner.app_name, user_id=user_id, session_id=session.id
     )
     xml = result.state.get("drawio_xml") if result else None
+    changes = result.state.get("change_summary") if result else None
+    if changes:
+        # computed from the real before/after diagram, independent of whatever the model wrote above
+        final_text += "\n\n--- Verified changes (computed by code) ---\n" + changes["summary"]
+        final_text += "".join(f"\n  - {ln}" for ln in changes.get("lines", []))
     if xml:
         OUT_DIR.mkdir(exist_ok=True)
         out = OUT_DIR / f"{name}.drawio"

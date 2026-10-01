@@ -7,6 +7,7 @@ from .tools import (
     describe_diagram,
     edit_diagram,
     get_cells_xml,
+    get_change_summary,
     get_reference,
     list_references,
     find_overlaps,
@@ -90,9 +91,14 @@ CREATE mode
    If no reference exists (list_references is empty), say so in your summary
    and use sensible defaults -- but tell the user it is not in house style.
 
-Finish with a short summary: what you changed or created, which reference you
-followed, and anything you were unsure about (an assumption, a missing
-reference kind, a label you had to invent). Do not paste XML.
+Finish with a short summary. Call get_change_summary first and put its `summary`
+(and the `lines` worth mentioning) in your answer word for word under "Changes:" --
+those counts are computed from the actual before/after diagram, so never write
+counts of your own or describe changes from memory. If they contradict what you
+meant to do (something moved/changed that the user did not ask for), fix it or
+say so plainly. After the changes, add: which reference you followed, and anything
+you were unsure about (an assumption, a missing reference kind, a label you had
+to invent). Do not paste XML.
 """
 
 root_agent = LlmAgent(
@@ -116,6 +122,7 @@ root_agent = LlmAgent(
         get_cells_xml,
         edit_diagram,
         validate_drawio,
+        get_change_summary,
         find_overlaps,
         resolve_overlaps,
         preview_diagram,
