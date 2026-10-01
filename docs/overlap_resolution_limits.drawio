@@ -1,0 +1,707 @@
+<mxfile host="drawio-plugin" modified="2026-10-01T02:47:36.519Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36" version="22.1.22" etag="oafe0oJlDb_HnBMuUxR8" type="embed" pages="10">
+  <diagram id="7da1acab-227f-4a0e-96d5-eb629df4f84b" name="1. Summary">
+    <mxGraphModel dx="970" dy="187" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="c1" value="Diagram editor agent: overlap clean-up - what to expect" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=22;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="20" y="10" width="1100" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="c2" value="Built from real runs of the tool. Each numbered page shows one situation: the diagram BEFORE, and the tool&#39;s actual result AFTER. Green = works well, red = a known limit the team should plan for." style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=13;fontColor=#444444;" parent="1" vertex="1">
+          <mxGeometry x="20" y="48" width="1100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="c3" value="#" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#333333;fontColor=#FFFFFF;fontStyle=1;fontSize=13;align=left;spacing=6;" parent="1" vertex="1">
+          <mxGeometry x="20" y="100" width="30" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="c4" value="Situation" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#333333;fontColor=#FFFFFF;fontStyle=1;fontSize=13;align=left;spacing=6;" parent="1" vertex="1">
+          <mxGeometry x="50" y="100" width="210" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="c5" value="What you will see" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#333333;fontColor=#FFFFFF;fontStyle=1;fontSize=13;align=left;spacing=6;" parent="1" vertex="1">
+          <mxGeometry x="260" y="100" width="400" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="c6" value="Impact" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#333333;fontColor=#FFFFFF;fontStyle=1;fontSize=13;align=left;spacing=6;" parent="1" vertex="1">
+          <mxGeometry x="660" y="100" width="80" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="c7" value="What to do" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#333333;fontColor=#FFFFFF;fontStyle=1;fontSize=13;align=left;spacing=6;" parent="1" vertex="1">
+          <mxGeometry x="740" y="100" width="380" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="c8" value="2" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="20" y="132" width="30" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c9" value="Typical overlap" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="50" y="132" width="210" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c10" value="Boxes pushed apart a little; arrows follow; sizes and fonts unchanged." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="260" y="132" width="400" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c11" value="None" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="660" y="132" width="80" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c12" value="Nothing: this is the normal case." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="740" y="132" width="380" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c13" value="3" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="20" y="188" width="30" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c14" value="Very crowded pile" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="50" y="188" width="210" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c15" value="Some boxes still overlap after moving and shrinking within the limits." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="260" y="188" width="400" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c16" value="Medium" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="660" y="188" width="80" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c17" value="Raise limits or re-layout by hand. The tool reports what is left." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="740" y="188" width="380" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c18" value="4" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="20" y="244" width="30" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c19" value="Locked elements" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="50" y="244" width="210" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c20" value="Two kept-in-place boxes that overlap each other cannot be fixed." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="260" y="244" width="400" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c21" value="Low" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="660" y="244" width="80" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c22" value="The agent must ask which constraint to relax." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="740" y="244" width="380" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c23" value="5" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="20" y="300" width="30" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c24" value="Long labels" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="50" y="300" width="210" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c25" value="Text shrinks to a minimum size; very long text in a small box still overflows." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="260" y="300" width="400" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c26" value="Medium" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="660" y="300" width="80" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c27" value="Shorten the label or enlarge the box. Fit check is approximate." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="740" y="300" width="380" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c28" value="6" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="20" y="356" width="30" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c29" value="Arrows with a loose end" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="50" y="356" width="210" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c30" value="Loose arrow ends stay behind when boxes move." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="260" y="356" width="400" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c31" value="Medium" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="660" y="356" width="80" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c32" value="Visual check after moves. Connect arrow ends to boxes." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="740" y="356" width="380" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c33" value="7" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="20" y="412" width="30" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c34" value="Arrows through boxes" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="50" y="412" width="210" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c35" value="Not detected: report says 0 overlaps although an arrow crosses a box." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="260" y="412" width="400" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c36" value="Medium" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="660" y="412" width="80" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c37" value="Look at the preview. Arrow routing is not handled." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="740" y="412" width="380" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c38" value="8" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="20" y="468" width="30" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c39" value="Circles and diamonds" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="50" y="468" width="210" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c40" value="Treated as rectangles: some unneeded movement." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="260" y="468" width="400" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c41" value="Low" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="660" y="468" width="80" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c42" value="Lock deliberately placed shapes." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="740" y="468" width="380" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c43" value="9" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="20" y="524" width="30" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c44" value="Packed neighbours" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="50" y="524" width="210" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c45" value="One fix can push several neighbouring zones." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="260" y="524" width="400" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c46" value="Medium" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="660" y="524" width="80" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c47" value="Restrict the clean-up to one area; read the list of moved items." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="740" y="524" width="380" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c48" value="10" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="20" y="580" width="30" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c49" value="Other limits" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="50" y="580" width="210" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c50" value="See page 10: text-only items that cannot be shown in a picture." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="260" y="580" width="400" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c51" value="Varies" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="660" y="580" width="80" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c52" value="Read page 10." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="740" y="580" width="380" height="56" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="b8e79792-ccdd-4e55-a9d4-22772609ad7b" name="2. Works well">
+    <mxGraphModel dx="970" dy="187" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="c1" value="2. Works well - typical overlap clean-up" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=22;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="20" y="10" width="1040" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="c2" value="Several boxes slightly on top of each other: the common case. This is what the tool is built for." style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=13;fontColor=#444444;" parent="1" vertex="1">
+          <mxGeometry x="20" y="48" width="1040" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="c3" value="REAL TOOL REPORT  overlaps: 3 -&gt; 0   moved: 4   resized: 0   fonts changed: 0   still overlapping: 0   labels still overflowing: 0" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;align=left;spacing=8;fontSize=12;fontFamily=Courier New;" parent="1" vertex="1">
+          <mxGeometry x="20" y="92" width="1000" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="c4" value="BEFORE" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#999999;dashed=1;verticalAlign=top;align=left;spacing=6;fontStyle=1;fontSize=13;fontColor=#555555;" parent="1" vertex="1">
+          <mxGeometry x="20" y="130" width="520" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="c5" value="AFTER (actual tool output)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#999999;dashed=1;verticalAlign=top;align=left;spacing=6;fontStyle=1;fontSize=13;fontColor=#555555;" parent="1" vertex="1">
+          <mxGeometry x="580" y="130" width="520" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="b_gw" value="API Gateway" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="100" y="230" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="b_auth" value="Auth Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="180" y="260" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="b_ord" value="Orders Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="120" y="300" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="b_bill" value="Billing Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="280" y="290" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="b_db" value="Orders DB" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="430" y="250" width="80" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="b_e1" value="" style="endArrow=block;html=1;strokeColor=#333333;" parent="1" source="b_gw" target="b_ord" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="b_e2" value="" style="endArrow=block;html=1;strokeColor=#333333;" parent="1" source="b_ord" target="b_db" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_gw" value="API Gateway" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="660" y="206.2" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="a_auth" value="Auth Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="725" y="266.2" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="a_ord" value="Orders Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="680" y="317.5" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="a_bill" value="Billing Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="855" y="290" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="a_db" value="Orders DB" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="990" y="250" width="80" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="a_e1" value="" style="endArrow=block;html=1;strokeColor=#333333;" parent="1" source="a_gw" target="a_ord" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_e2" value="" style="endArrow=block;html=1;strokeColor=#333333;" parent="1" source="a_ord" target="a_db" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c6" value="What happens&lt;br&gt;Overlapping boxes are pushed apart a little, each by a small bounded amount. Arrows attached to boxes follow them. Sizes and fonts stay as they were." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;align=left;verticalAlign=top;spacing=8;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="20" y="550" width="520" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="c7" value="What the business should expect&lt;br&gt;Reliable for light and medium overlap: a few boxes touching or partly covering each other. Result is validated before it is saved." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;align=left;verticalAlign=top;spacing=8;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="580" y="550" width="520" height="130" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="0728b3ad-42ea-47c0-8079-2353c3eb3ff3" name="3. Too crowded">
+    <mxGraphModel dx="970" dy="187" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="c1" value="3. Too crowded - the movement budget runs out" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=22;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="20" y="10" width="1040" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="c2" value="A pile of boxes dropped almost on top of each other (e.g. copy-paste). Default limits: move at most 80 px per box, shrink to 75%." style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=13;fontColor=#444444;" parent="1" vertex="1">
+          <mxGeometry x="20" y="48" width="1040" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="c3" value="REAL TOOL REPORT  overlaps: 22 -&gt; 5   moved: 8   resized: 7   fonts changed: 0   still overlapping: 5   labels still overflowing: 0" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;align=left;spacing=8;fontSize=12;fontFamily=Courier New;" parent="1" vertex="1">
+          <mxGeometry x="20" y="92" width="1000" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="c4" value="BEFORE" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#999999;dashed=1;verticalAlign=top;align=left;spacing=6;fontStyle=1;fontSize=13;fontColor=#555555;" parent="1" vertex="1">
+          <mxGeometry x="20" y="130" width="520" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="c5" value="AFTER (actual tool output)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#999999;dashed=1;verticalAlign=top;align=left;spacing=6;fontStyle=1;fontSize=13;fontColor=#555555;" parent="1" vertex="1">
+          <mxGeometry x="580" y="130" width="520" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="b_s0" value="Service A" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="100" y="220" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="b_s1" value="Service B" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="118" y="234" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="b_s2" value="Service C" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="136" y="248" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="b_s3" value="Service D" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="154" y="262" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="b_s4" value="Service E" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="172" y="276" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="b_s5" value="Service F" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="190" y="290" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="b_s6" value="Service G" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="208" y="304" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="b_s7" value="Service H" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="226" y="318" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="a_s0" value="Service A" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;strokeColor=#FF0000;strokeWidth=3;" parent="1" vertex="1">
+          <mxGeometry x="660" y="237" width="127.5" height="53" as="geometry" />
+        </mxCell>
+        <mxCell id="a_s1" value="Service B" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;strokeColor=#FF0000;strokeWidth=3;" parent="1" vertex="1">
+          <mxGeometry x="678" y="320" width="170" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="a_s2" value="Service C" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="696" y="182" width="170" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="a_s3" value="Service D" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;strokeColor=#FF0000;strokeWidth=3;" parent="1" vertex="1">
+          <mxGeometry x="714" y="311.8" width="170" height="51.8" as="geometry" />
+        </mxCell>
+        <mxCell id="a_s4" value="Service E" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;strokeColor=#FF0000;strokeWidth=3;" parent="1" vertex="1">
+          <mxGeometry x="732" y="229" width="170" height="51.1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_s5" value="Service F" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;strokeColor=#FF0000;strokeWidth=3;" parent="1" vertex="1">
+          <mxGeometry x="791" y="241" width="129" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="a_s6" value="Service G" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;strokeColor=#FF0000;strokeWidth=3;" parent="1" vertex="1">
+          <mxGeometry x="789.5" y="264" width="148.5" height="45.8" as="geometry" />
+        </mxCell>
+        <mxCell id="a_s7" value="Service H" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="786" y="384" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c6" value="What happens&lt;br&gt;Each box may only move a limited distance and shrink a limited amount. Boxes outlined in red are still overlapping after the tool did everything it is allowed to do." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;align=left;verticalAlign=top;spacing=8;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="20" y="550" width="520" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="c7" value="What the business should expect&lt;br&gt;Heavy overlap cannot be fully fixed within the limits. The tool reports what is left instead of scattering the diagram. Options: raise the limits (more movement, smaller boxes), or re-layout manually." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;align=left;verticalAlign=top;spacing=8;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="580" y="550" width="520" height="130" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="68827670-4407-422f-a57d-1fbef169eedc" name="4. Locked elements">
+    <mxGraphModel dx="970" dy="187" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="c1" value="4. Locked elements - cannot move what the user said to keep" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=22;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="20" y="10" width="1040" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="c2" value="The request says both databases must stay exactly where they are. They overlap each other." style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=13;fontColor=#444444;" parent="1" vertex="1">
+          <mxGeometry x="20" y="48" width="1040" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="c3" value="REAL TOOL REPORT  overlaps: 1 -&gt; 1   moved: 0   resized: 0   fonts changed: 0   still overlapping: 1   labels still overflowing: 0" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;align=left;spacing=8;fontSize=12;fontFamily=Courier New;" parent="1" vertex="1">
+          <mxGeometry x="20" y="92" width="1000" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="c4" value="BEFORE" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#999999;dashed=1;verticalAlign=top;align=left;spacing=6;fontStyle=1;fontSize=13;fontColor=#555555;" parent="1" vertex="1">
+          <mxGeometry x="20" y="130" width="520" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="c5" value="AFTER (actual tool output)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#999999;dashed=1;verticalAlign=top;align=left;spacing=6;fontStyle=1;fontSize=13;fontColor=#555555;" parent="1" vertex="1">
+          <mxGeometry x="580" y="130" width="520" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="b_pri" value="Primary DB (keep in place)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="120" y="240" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="b_rep" value="Replica DB (keep in place)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="200" y="280" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="b_cache" value="Cache" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="390" y="260" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="b_note" value="Reporting" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="80" y="360" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="a_pri" value="Primary DB (keep in place)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=12;strokeColor=#FF0000;strokeWidth=3;" parent="1" vertex="1">
+          <mxGeometry x="680" y="240" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="a_rep" value="Replica DB (keep in place)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=12;strokeColor=#FF0000;strokeWidth=3;" parent="1" vertex="1">
+          <mxGeometry x="760" y="280" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="a_cache" value="Cache" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="950" y="260" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="a_note" value="Reporting" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="640" y="360" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="c6" value="What happens&lt;br&gt;Locked boxes are never moved or resized, so an overlap between two locked boxes cannot be fixed. Only unlocked neighbours may move." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;align=left;verticalAlign=top;spacing=8;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="20" y="550" width="520" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="c7" value="What the business should expect&lt;br&gt;Contradictory instructions (keep both fixed + remove the overlap) end with a report, not a guess. The agent must tell the user which constraint to relax." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;align=left;verticalAlign=top;spacing=8;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="580" y="550" width="520" height="130" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="07d9ed12-8462-4164-9c5c-1002c0b99a6f" name="5. Long labels">
+    <mxGraphModel dx="970" dy="405" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="c1" value="5. Long labels - the font has a floor" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=22;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="20" y="10" width="1040" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="c2" value="Not an overlap problem but a related one: text that does not fit its box. Tool run with fix_overflow=true and minimum font 8." style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=13;fontColor=#444444;" parent="1" vertex="1">
+          <mxGeometry x="20" y="48" width="1040" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="c3" value="REAL TOOL REPORT  overlaps: 0 -&gt; 0   moved: 0   resized: 0   fonts changed: 2   still overlapping: 0   labels still overflowing: 1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;align=left;spacing=8;fontSize=12;fontFamily=Courier New;" parent="1" vertex="1">
+          <mxGeometry x="20" y="92" width="1000" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="c4" value="BEFORE" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#999999;dashed=1;verticalAlign=top;align=left;spacing=6;fontStyle=1;fontSize=13;fontColor=#555555;" parent="1" vertex="1">
+          <mxGeometry x="20" y="130" width="520" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="c5" value="AFTER (actual tool output)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#999999;dashed=1;verticalAlign=top;align=left;spacing=6;fontStyle=1;fontSize=13;fontColor=#555555;" parent="1" vertex="1">
+          <mxGeometry x="580" y="130" width="520" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="b_v" value="Customer Identity Verification and Fraud Screening Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="80" y="230" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="b_pg" value="Payment Gateway Adapter" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=14;" parent="1" vertex="1">
+          <mxGeometry x="210" y="230" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="b_ok" value="Fits fine" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="360" y="230" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="b_n4" value="Billing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="80" y="330" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="a_v" value="Customer Identity Verification and Fraud Screening Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=8;strokeColor=#FF0000;strokeWidth=3;" parent="1" vertex="1">
+          <mxGeometry x="640" y="230" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="a_pg" value="Payment Gateway Adapter" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="770" y="230" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="a_ok" value="Fits fine" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="920" y="230" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="a_n4" value="Billing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="640" y="330" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="c6" value="What happens&lt;br&gt;Fonts shrink just enough to fit, never below the minimum and never larger. A label too long for a small box overflows even at the minimum size (outlined in red)." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;align=left;verticalAlign=top;spacing=8;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="20" y="550" width="520" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="c7" value="What the business should expect&lt;br&gt;Moderate overflow is fixed automatically. Very long text in a small box is only reported: shorten the label or enlarge the box. Fit is estimated with standard font metrics, so it is approximate, not pixel exact." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;align=left;verticalAlign=top;spacing=8;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="580" y="550" width="520" height="130" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="eaff09f9-0a25-490b-ac4d-8217144c92dd" name="6. Arrows with a loose end">
+    <mxGraphModel dx="970" dy="405" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="c1" value="6. Arrows with a loose end - they do not follow" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=22;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="20" y="10" width="1040" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="c2" value="The arrow starts at Order Service and its loose end was drawn by hand to touch External Partner (it is not connected to it)." style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=13;fontColor=#444444;" parent="1" vertex="1">
+          <mxGeometry x="20" y="48" width="1040" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="c3" value="REAL TOOL REPORT  overlaps: 1 -&gt; 0   moved: 2   resized: 0   fonts changed: 0   still overlapping: 0   labels still overflowing: 0" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;align=left;spacing=8;fontSize=12;fontFamily=Courier New;" parent="1" vertex="1">
+          <mxGeometry x="20" y="92" width="1000" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="c4" value="BEFORE" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#999999;dashed=1;verticalAlign=top;align=left;spacing=6;fontStyle=1;fontSize=13;fontColor=#555555;" parent="1" vertex="1">
+          <mxGeometry x="20" y="130" width="520" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="c5" value="AFTER (actual tool output)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#999999;dashed=1;verticalAlign=top;align=left;spacing=6;fontStyle=1;fontSize=13;fontColor=#555555;" parent="1" vertex="1">
+          <mxGeometry x="580" y="130" width="520" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="b_part" value="External Partner" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="350" y="240" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="b_fw" value="Firewall" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="420" y="245" width="90" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="b_ord" value="Order Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="90" y="250" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="b_e1" value="" style="endArrow=block;html=1;strokeColor=#333333;" parent="1" source="b_ord" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="350" y="270" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a_part" value="External Partner" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="890" y="240" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="a_fw" value="Firewall" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="1000" y="245" width="90" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="a_ord" value="Order Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="650" y="250" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="a_e1" value="" style="endArrow=block;html=1;strokeColor=#333333;" parent="1" source="a_ord" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="910" y="270" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c6" value="What happens&lt;br&gt;Arrows connected to boxes at both ends follow when boxes move. An arrow with a loose end keeps its loose end at the old position, so it can end in empty space or inside another box." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;align=left;verticalAlign=top;spacing=8;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="20" y="550" width="520" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="c7" value="What the business should expect&lt;br&gt;Diagrams drawn with hand-placed arrow ends need a visual check after any move. The tool warns when such arrows exist. Fix: connect the arrow end to the box." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;align=left;verticalAlign=top;spacing=8;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="580" y="550" width="520" height="130" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="b07c0241-311f-4cd1-97bb-129083c6e444" name="7. Arrows through boxes">
+    <mxGraphModel dx="970" dy="405" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="c1" value="7. Arrows through boxes - not detected" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=22;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="20" y="10" width="1040" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="c2" value="A straight arrow from Web App to Orders API goes right through the Cache box. Boxes do not overlap each other." style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=13;fontColor=#444444;" parent="1" vertex="1">
+          <mxGeometry x="20" y="48" width="1040" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="c3" value="REAL TOOL REPORT  overlaps: 0 -&gt; 0   moved: 0   resized: 0   fonts changed: 0   still overlapping: 0   labels still overflowing: 0" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;align=left;spacing=8;fontSize=12;fontFamily=Courier New;" parent="1" vertex="1">
+          <mxGeometry x="20" y="92" width="1000" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="c4" value="BEFORE" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#999999;dashed=1;verticalAlign=top;align=left;spacing=6;fontStyle=1;fontSize=13;fontColor=#555555;" parent="1" vertex="1">
+          <mxGeometry x="20" y="130" width="520" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="c5" value="AFTER (actual tool output)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#999999;dashed=1;verticalAlign=top;align=left;spacing=6;fontStyle=1;fontSize=13;fontColor=#555555;" parent="1" vertex="1">
+          <mxGeometry x="580" y="130" width="520" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="b_a" value="Web App" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="80" y="280" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="b_b" value="Cache" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="250" y="265" width="100" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="b_c" value="Orders API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="420" y="280" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="b_e1" value="" style="endArrow=block;html=1;strokeColor=#333333;" parent="1" source="b_a" target="b_c" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_a" value="Web App" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="640" y="280" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="a_b" value="Cache" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="810" y="265" width="100" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="a_c" value="Orders API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="980" y="280" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="a_e1" value="" style="endArrow=block;html=1;strokeColor=#333333;" parent="1" source="a_a" target="a_c" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c6" value="What happens&lt;br&gt;The tool only looks at boxes. It does not see arrows passing through boxes, arrows crossing each other, or labels sitting on lines. It reports 0 overlaps and changes nothing." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;align=left;verticalAlign=top;spacing=8;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="20" y="550" width="520" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="c7" value="What the business should expect&lt;br&gt;A clean report does not mean a clean diagram. The preview (and a human look) is still needed for arrow routing. Edge routing clean-up is not part of this tool." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;align=left;verticalAlign=top;spacing=8;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="580" y="550" width="520" height="130" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="7349ae12-a40d-4d5b-b6de-6bda1bc2cd49" name="8. Round shapes">
+    <mxGraphModel dx="970" dy="405" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="c1" value="8. Round shapes - treated as rectangles" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=22;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="20" y="10" width="1040" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="c2" value="Circles and diamonds whose corners (bounding boxes) overlap, while the visible shapes do not touch." style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=13;fontColor=#444444;" parent="1" vertex="1">
+          <mxGeometry x="20" y="48" width="1040" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="c3" value="REAL TOOL REPORT  overlaps: 1 -&gt; 0   moved: 2   resized: 0   fonts changed: 0   still overlapping: 0   labels still overflowing: 0" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;align=left;spacing=8;fontSize=12;fontFamily=Courier New;" parent="1" vertex="1">
+          <mxGeometry x="20" y="92" width="1000" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="c4" value="BEFORE" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#999999;dashed=1;verticalAlign=top;align=left;spacing=6;fontStyle=1;fontSize=13;fontColor=#555555;" parent="1" vertex="1">
+          <mxGeometry x="20" y="130" width="520" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="c5" value="AFTER (actual tool output)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#999999;dashed=1;verticalAlign=top;align=left;spacing=6;fontStyle=1;fontSize=13;fontColor=#555555;" parent="1" vertex="1">
+          <mxGeometry x="580" y="130" width="520" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="b_c1" value="Cloud" style="ellipse;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="100" y="230" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="b_c2" value="On-prem" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="190" y="320" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="b_d1" value="Rotated" style="rhombus;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="390" y="250" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="b_d2" value="Decision" style="rhombus;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="440" y="300" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="a_c1" value="Cloud" style="ellipse;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="640" y="230" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="a_c2" value="On-prem" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="770" y="320" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="a_d1" value="Rotated" style="rhombus;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="950" y="250" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="a_d2" value="Decision" style="rhombus;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="1000" y="300" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="c6" value="What happens&lt;br&gt;Overlap is measured on each shape&#39;s bounding rectangle. Round or diamond shapes placed diagonally are reported as overlapping and get moved even though they were fine." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;align=left;verticalAlign=top;spacing=8;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="20" y="550" width="520" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="c7" value="What the business should expect&lt;br&gt;Some unnecessary movement, mostly with circles, diamonds and rotated shapes. Harmless but visible. Use lock for shapes that were placed deliberately." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;align=left;verticalAlign=top;spacing=8;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="580" y="550" width="520" height="130" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="bc2298c9-76e1-4f15-aca8-df708a3e18eb" name="9. Ripple effect">
+    <mxGraphModel dx="970" dy="405" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="c1" value="9. Ripple effect - one fix can move neighbours" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=22;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="20" y="10" width="1040" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="c2" value="Two services overlap inside Zone 1. The three zones are packed edge to edge, with no free space between them." style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=13;fontColor=#444444;" parent="1" vertex="1">
+          <mxGeometry x="20" y="48" width="1040" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="c3" value="REAL TOOL REPORT  overlaps: 1 -&gt; 0   moved: 5   resized: 0   fonts changed: 0   still overlapping: 0   labels still overflowing: 0" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;align=left;spacing=8;fontSize=12;fontFamily=Courier New;" parent="1" vertex="1">
+          <mxGeometry x="20" y="92" width="1000" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="c4" value="BEFORE" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#999999;dashed=1;verticalAlign=top;align=left;spacing=6;fontStyle=1;fontSize=13;fontColor=#555555;" parent="1" vertex="1">
+          <mxGeometry x="20" y="130" width="520" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="c5" value="AFTER (actual tool output)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#999999;dashed=1;verticalAlign=top;align=left;spacing=6;fontStyle=1;fontSize=13;fontColor=#555555;" parent="1" vertex="1">
+          <mxGeometry x="580" y="130" width="520" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="b_z1" value="Zone 1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;fontSize=12;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="70" y="220" width="140" height="230" as="geometry" />
+        </mxCell>
+        <mxCell id="b_z2" value="Zone 2" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;fontSize=12;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="210" y="220" width="140" height="230" as="geometry" />
+        </mxCell>
+        <mxCell id="b_z3" value="Zone 3" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;fontSize=12;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="350" y="220" width="140" height="230" as="geometry" />
+        </mxCell>
+        <mxCell id="b_a1" value="Service A" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="80" y="250" width="70" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="b_a2" value="Service B" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="120" y="255" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="b_b1" value="Service C" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="220" y="250" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="b_c1" value="Service D" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="360" y="250" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="a_z1" value="Zone 1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;fontSize=12;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="588.8" y="220" width="180" height="230" as="geometry" />
+        </mxCell>
+        <mxCell id="a_z2" value="Zone 2" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;fontSize=12;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="778.8" y="220" width="140" height="230" as="geometry" />
+        </mxCell>
+        <mxCell id="a_z3" value="Zone 3" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;fontSize=12;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="922.5" y="220" width="140" height="230" as="geometry" />
+        </mxCell>
+        <mxCell id="a_a1" value="Service A" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="598.8" y="250" width="70" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="a_a2" value="Service B" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="678.8" y="255" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="a_b1" value="Service C" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="788.8" y="250" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="a_c1" value="Service D" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="932.5" y="250" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="c6" value="What happens&lt;br&gt;Fixing the overlap inside Zone 1 makes the zone grow. The grown zone pushes Zone 2, which pushes Zone 3: a small local problem moves several areas. Pushed neighbours can also end up closer together than the usual spacing, because clearance is only added when a pair is pushed." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;align=left;verticalAlign=top;spacing=8;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="20" y="550" width="520" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="c7" value="What the business should expect&lt;br&gt;On tightly packed diagrams a fix can shift more than the overlapping boxes. Each box moves at most the limit, and the report lists everything that moved. Use &#39;only&#39; to restrict the clean-up to one area." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;align=left;verticalAlign=top;spacing=8;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="580" y="550" width="520" height="130" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="cae0e351-0cff-4e15-a23b-87a63ecac576" name="10. Other limits">
+    <mxGraphModel dx="970" dy="187" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="c1" value="10. Other limits that are not easy to draw" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=22;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="20" y="10" width="1040" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="c2" value="Preview accuracy" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#333333;fontColor=#FFFFFF;fontStyle=1;fontSize=13;align=left;spacing=6;" parent="1" vertex="1">
+          <mxGeometry x="20" y="60" width="260" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="c3" value="Without the draw.io export server the preview is a schematic drawing (straight arrows, no icons). Real draw.io rendering needs the export server to be reachable. Falls back automatically, and says which one was used." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=8;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="280" y="60" width="780" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="c4" value="Text fit is an estimate" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#333333;fontColor=#FFFFFF;fontStyle=1;fontSize=13;align=left;spacing=6;" parent="1" vertex="1">
+          <mxGeometry x="20" y="124" width="260" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="c5" value="Label fit uses standard font measurements, not draw.io&#39;s own renderer. Expect occasional labels that still look tight or are shrunk more than needed." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=8;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="280" y="124" width="780" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="c6" value="Only the first page of a file is edited" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#333333;fontColor=#FFFFFF;fontStyle=1;fontSize=13;align=left;spacing=6;" parent="1" vertex="1">
+          <mxGeometry x="20" y="188" width="260" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="c7" value="Describe and preview accept a page number, but edit operations act on the first page only." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=8;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="280" y="188" width="780" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="c8" value="New diagrams depend on reference diagrams" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#333333;fontColor=#FFFFFF;fontStyle=1;fontSize=13;align=left;spacing=6;" parent="1" vertex="1">
+          <mxGeometry x="20" y="252" width="260" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="c9" value="Creating a diagram in the house style needs the reference diagrams installed. Without them the agent must say it is not in house style." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=8;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="280" y="252" width="780" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="c10" value="Judgement calls stay with the model" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#333333;fontColor=#FFFFFF;fontStyle=1;fontSize=13;align=left;spacing=6;" parent="1" vertex="1">
+          <mxGeometry x="20" y="316" width="260" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="c11" value="Requests like &#39;identify the AWS zone&#39; rely on the labels and shapes in the file. With several candidates or unusual names the agent can pick the wrong one: ask it to state what it picked." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=8;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="280" y="316" width="780" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="c12" value="Placeholders are shown raw" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#333333;fontColor=#FFFFFF;fontStyle=1;fontSize=13;align=left;spacing=6;" parent="1" vertex="1">
+          <mxGeometry x="20" y="380" width="260" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="c13" value="Labels such as %owner% (draw.io placeholders) are shown as written, not resolved to the property value." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=8;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="280" y="380" width="780" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="c14" value="Not a layout designer" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#333333;fontColor=#FFFFFF;fontStyle=1;fontSize=13;align=left;spacing=6;" parent="1" vertex="1">
+          <mxGeometry x="20" y="444" width="260" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="c15" value="The tool removes overlaps and keeps the existing design. It does not re-arrange a diagram, align things to a grid or improve readability." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BBBBBB;align=left;verticalAlign=middle;spacing=8;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="280" y="444" width="780" height="64" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

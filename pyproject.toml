@@ -8,4 +8,10 @@ dependencies = [
     "matplotlib",
     "google-adk",
     "anthropic",
+    "sqlalchemy[asyncio]",
+    "asyncpg",
+    "defusedxml",
 ]
+
+[dependency-groups]
+dev = ["pytest"]
